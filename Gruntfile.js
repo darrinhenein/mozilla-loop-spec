@@ -14,12 +14,79 @@ module.exports = function (grunt) {
 
     // Define the configuration for all the tasks
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
 
         // Project settings
         config: {
             // Configurable paths
             app: 'app',
             dist: 'dist'
+        },
+
+        uglify: {
+          options: {
+            // the banner is inserted at the top of the output
+            banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+          },
+          dist: {
+            files: {
+              'build/app.min.js': ['<%= concat.dist.dest %>']
+            }
+          }
+        },
+
+        react: {
+            files: {
+              expand: true,
+              cwd: 'src/',
+              src: ['**/*.jsx'],
+              dest: 'src/',
+              ext: '.js'
+            }
+          },
+
+        copy:{
+          html: {
+            src: 'src/index.html', dest: 'build/index.html'
+          }
+        },
+
+        useminPrepare: {
+          html: 'src/index.html',
+          options: {
+            dest: 'build'
+          }
+        },
+
+        usemin: {
+          html: ['build/{,*/}*.html'],
+          css: ['build/{,*/}*.css'],
+          options: {
+            assetsDirs: ['build']
+          }
+        },
+
+        cssmin: {
+          minify: {
+            expand: true,
+            cwd: 'src',
+            src: ['app.css',  '!*.min.css'],
+            dest: 'build',
+            ext: '.min.css'
+          }
+        },
+
+        concat: {
+          options: {
+            // define a string to put between each file in the concatenated output
+            separator: ';'
+          },
+          dist: {
+            // the files to concatenate
+            src: ['src/app.js'],
+            // the location of the resulting JS file
+            dest: 'build/app.js'
+          }
         },
 
         rsync: {
@@ -41,6 +108,7 @@ module.exports = function (grunt) {
     });
 
 
-    grunt.registerTask('deploy', ['rsync:prod']);
+    grunt.registerTask('build', ['react', 'copy:html', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'usemin']);
+    grunt.registerTask('deploy', ['build', 'rsync:prod']);
 
 };
