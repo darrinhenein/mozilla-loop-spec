@@ -1,0 +1,16 @@
+{
+  "name": "loop-react",
+  "version": "0.0.1",
+  "description": "",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "darrin@mozilla.com",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-rsync": "^0.5.0",
+    "load-grunt-tasks": "^0.4.0"
+  }
+}
