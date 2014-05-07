@@ -89,10 +89,53 @@ module.exports = function (grunt) {
           }
         },
 
+        watch: {
+          options: {
+            livereload: true,
+          },
+          css: {
+            files: 'src/*.scss',
+            tasks: ['build'],
+          },
+          scripts: {
+            files: ['src/**/*.jsx', 'src/**/*.js'],
+            tasks: ['build'],
+          },
+          html: {
+            files: 'src/*.html',
+            tasks: ['build'],
+          }
+        },
+
+        connect: {
+          options: {
+            port: 9000,
+            // Change this to '0.0.0.0' to access the server from outside.
+            hostname: 'localhost',
+            livereload: 35729
+          },
+          livereload: {
+            options: {
+              open: true,
+              base: [
+                'build'
+              ]
+            }
+          }
+        },
+
+        sass: {
+          dist: {
+            files: {
+              'src/app.css': 'src/app.scss'
+            }
+          }
+        },
+
         rsync: {
           options: {
             args: ["--verbose"],
-            exclude: [".git*", "node_modules", "robots.txt", ".htaccess", ".bowerrc", "bower.json", "package.json", "sshsettings.json", "Gruntfile.js", ".DS_Store", "bower_components/**"],
+            exclude: [".git*", ".module-cache/**", "node_modules", "robots.txt", ".htaccess", ".bowerrc", "bower.json", "package.json", "sshsettings.json", "Gruntfile.js", ".DS_Store", "bower_components/**"],
             recursive: true
           },
           prod: {
@@ -108,7 +151,8 @@ module.exports = function (grunt) {
     });
 
 
-    grunt.registerTask('build', ['react', 'copy:html', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'usemin']);
+    grunt.registerTask('build', ['react', 'sass', 'copy:html', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'usemin']);
     grunt.registerTask('deploy', ['build', 'rsync:prod']);
+    grunt.registerTask('serve', ['build', 'connect:livereload', 'watch']);
 
 };

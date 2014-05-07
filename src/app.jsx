@@ -143,8 +143,29 @@ var PanelGroup = React.createClass({
 })
 
 var Profile = React.createClass({
+  getInitialState: function() {
+    return {
+      isDropdownVisible: false
+    }
+  },
   onClick: function(){
     this.props.onClick(this.props.key);
+  },
+  hideDropdown: function() {
+    $(this.refs.callDropdown.getDOMNode()).hide();
+    this.setState({
+      isDropdownVisible: false
+    });
+  },
+  toggleDropdown: function(){
+    if(this.state.isDropdownVisible) {
+      $(this.refs.callDropdown.getDOMNode()).hide();
+    } else {
+      $(this.refs.callDropdown.getDOMNode()).show();
+    }
+    this.setState({
+      isDropdownVisible: !this.state.isDropdownVisible
+    });
   },
   render: function(){
     return (
@@ -154,10 +175,16 @@ var Profile = React.createClass({
           <div className="username">{ this.props.user.name }</div>
           <div className="email">{ this.props.user.email }</div>
         </div>
-        <div className="icons">
-          <i className=" fa fa-video-camera"></i>
-          <i className=" fa fa-caret-down"></i>
+        <div className="icons" onClick={this.toggleDropdown}>
+          <i className="fa fa-video-camera"></i>
+          <i className="fa fa-caret-down"></i>
         </div>
+        <ul ref="callDropdown" onMouseLeave={this.hideDropdown} className="Dropdown">
+          <li><i className="fa fa-video-camera"></i>Video Call</li>
+          <li><i className="fa fa-phone"></i>Audio Call</li>
+          <li><i className="fa fa-user"></i>Edit Contact...</li>
+          <li><i className="fa fa-trash-o"></i>Remove Contact</li>
+        </ul>
       </div>
     )
   }
@@ -405,7 +432,7 @@ var HistoryList = React.createClass({
           {_.range(10).map(function(i){
             var u = getRandomInt(0, _users.length -1);
             var callType = getRandomInt(0, 1) === 1 ? 'incoming' : 'outgoing';
-            var missed = getRandomInt(0, 5) === 1 ? 'missed' : 'accepted';
+            var missed = getRandomInt(0, 3) === 1 ? 'missed' : 'accepted';
             var icon, callIcon;
             if(missed === 'missed') {
               icon = <i className="fa fa-times-circle"></i>
@@ -413,16 +440,16 @@ var HistoryList = React.createClass({
               icon = <i className="fa fa-phone"></i>
             }
             if(callType === 'incoming') {
-              callIcon = <i className="fa fa-arrow-right"></i>
+              callIcon = <i data-tip={"Incoming (" + missed + ")"} className="fa tip fa-arrow-right"></i>
             } else {
-              callIcon = <i className="fa fa-arrow-left"></i>
+              callIcon = <i data-tip={"Outgoing (" + missed + ")"} className="fa tip fa-arrow-left"></i>
             }
             return (
               <li key={"CallerHistory" + i} className={[callType, missed].join(' ')}>
                 {callIcon}
                 <SmallProfile user={_users[u]} />
                 <div className="CallDetails right">
-                  4:32pm May 3
+                  May 3 4:32pm
                 </div>
               </li>
             )
