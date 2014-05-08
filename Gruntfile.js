@@ -38,9 +38,9 @@ module.exports = function (grunt) {
         react: {
             files: {
               expand: true,
-              cwd: 'src/',
-              src: ['**/*.jsx'],
-              dest: 'src/',
+              cwd: 'build/',
+              src: ['app.jsx'],
+              dest: 'build/',
               ext: '.js'
             }
           },
@@ -86,9 +86,22 @@ module.exports = function (grunt) {
           },
           dist: {
             // the files to concatenate
-            src: ['src/app.js'],
+            src: ['build/app.js'],
             // the location of the resulting JS file
             dest: 'build/app.js'
+          }
+        },
+
+        browserify: {
+          js: {
+            // A single entry point for our app
+            src: 'src/main.js',
+            // Compile to a single file to add a script tag for in your HTML
+            dest: 'build/app.jsx',
+          },
+          options: {
+            transform:  [ require('grunt-react').browserify ],
+            external: ['_', 'React']
           }
         },
 
@@ -102,7 +115,7 @@ module.exports = function (grunt) {
             tasks: ['build'],
           },
           scripts: {
-            files: ['src/**/*.jsx'],
+            files: ['src/**/*.js', 'src/**/*.jsx'],
             tasks: ['build'],
           },
           html: {
@@ -150,12 +163,14 @@ module.exports = function (grunt) {
               syncDestIgnoreExcl: true
             }
           }
-        }
+        },
+
+        clean: ['build']
 
     });
 
 
-    grunt.registerTask('build', ['react', 'sass', 'copy', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'usemin']);
+    grunt.registerTask('build', ['clean', 'browserify', 'react', 'sass', 'copy', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'usemin']);
     grunt.registerTask('deploy', ['build', 'rsync:prod']);
     grunt.registerTask('serve', ['build', 'connect:livereload', 'watch']);
 
