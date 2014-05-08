@@ -48,6 +48,9 @@ module.exports = function (grunt) {
         copy:{
           html: {
             src: 'src/index.html', dest: 'build/index.html'
+          },
+          images: {
+            src: 'images/*', dest: 'build/', cwd: 'src/', expand: true
           }
         },
 
@@ -92,13 +95,14 @@ module.exports = function (grunt) {
         watch: {
           options: {
             livereload: true,
+            interrupt: true
           },
           css: {
             files: 'src/*.scss',
             tasks: ['build'],
           },
           scripts: {
-            files: ['src/**/*.jsx', 'src/**/*.js'],
+            files: ['src/**/*.jsx'],
             tasks: ['build'],
           },
           html: {
@@ -151,7 +155,7 @@ module.exports = function (grunt) {
     });
 
 
-    grunt.registerTask('build', ['react', 'sass', 'copy:html', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'usemin']);
+    grunt.registerTask('build', ['react', 'sass', 'copy', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'usemin']);
     grunt.registerTask('deploy', ['build', 'rsync:prod']);
     grunt.registerTask('serve', ['build', 'connect:livereload', 'watch']);
 

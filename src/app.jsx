@@ -8,7 +8,7 @@ var STRINGS = {
   changeUsername: "Change",
   loggedInUsername: "ally@gmail.com",
   loggedOutUsername: "Guest",
-  newCallButton: "New Call",
+  newCallButton: "New Invitation",
   callingAs: "Calling as",
   searchPlaceholder: "Search...",
   getLinkText: "Get Link",
@@ -17,33 +17,62 @@ var STRINGS = {
   sampleCallURL: "http://lo.op/nx3nd7h",
   shareThisLinkWith: "Share this link with",
   callHistory: "Call History",
-  clearHistory: "Clear"
+  clearHistory: "Clear",
+  invitationList: "Your Invitations",
+  expired: "Expired",
+  endCall: "Hang Up"
 };
 
-var getRandomInt = function(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+var linkGenerationTime = 1000;
+
+var getTimeFromRange = function(position) {
+  var minp = 1;
+  var maxp = 100;
+
+  var minv = Math.log(60);
+  var maxv = Math.log(44640);
+
+  var scale = (maxv-minv) / (maxp-minp);
+  var scaled = Math.exp(minv + scale*(position-minp));
+
+  var dur = moment.duration(scaled, 'minutes');
+  if(dur.asMinutes() > 60*24)
+  {
+    var num = parseInt(dur.asDays(), 10);
+    var plural = num > 1 ? 's' : '';
+    return  num + ' day' + plural;
+  } else {
+    var num = parseInt(dur.asHours(), 10) + 1;
+    var plural = num > 1 ? 's' : '';
+    return  num + ' hour' + plural;
+  }
 }
 
 var _users = [
   {
     name: 'Ally Avocado',
-    email: 'ally@mail.com'
+    email: 'ally@mail.com',
+    index: 0
   },
   {
     name: 'Bob Banana',
-    email: 'bob@gmail.com'
+    email: 'bob@gmail.com',
+    index: 1
   },
   {
     name: 'Caitlin Cantaloupe',
-    email: 'caitlin.cant@hotmail.com'
+    email: 'caitlin.cant@hotmail.com',
+    index: 2
   },
   {
     name: 'Dave Dragonfruit',
-    email: 'dd@dragons.net'
+    email: 'dd@dragons.net',
+    index: 3
   },
   {
     name: 'Ellie Eggplant',
-    email: 'ellie@yahoo.com'
+    email: 'ellie@yahoo.com',
+    index: 4
   }
 ];
 
@@ -74,13 +103,41 @@ var BaseState = React.createClass({
   }
 });
 
+var BaseStateCorner = React.createClass({
+  getDefaultProps: function(){
+    return {
+      name: 'Base State',
+      children: [],
+      index: 1
+    }
+  },
+  render: function(){
+    return (
+      <div className="StateWrapper">
+        <h3><span className="counter">{ this.props.index + 1 }</span> { this.props.name }</h3>
+        <div className="Browser">
+          <div className="WindowWrapper">
+            { this.props.children }
+          </div>
+        </div>
+      </div>
+    )
+  }
+});
+
 var TabBar = React.createClass({
   render: function() {
     return (
       <ul className="TabBar">
-        <li className={(this.props.selected === 0) ? 'active tip' : 'tip'} data-tip="Call Tab"><i className="fa fa-phone"></i></li>
-        <li className={(this.props.selected === 1) ? 'active tip' : 'tip'} data-tip="Call History Tab"><i className="fa fa-clock-o"></i></li>
-        <li className={(this.props.selected === 2) ? 'active tip' : 'tip'} data-tip="Invitation Revocation/Permissions Tab"><i className="fa fa-link"></i></li>
+        <li className={(this.props.selected === 0) ? 'active tip' : 'tip'} data-tip="Call Tab">
+          <a href="#precall"><i className="fa fa-phone"></i></a>
+        </li>
+        <li className={(this.props.selected === 1) ? 'active tip' : 'tip'} data-tip="Call History Tab">
+          <a href="#callhistory"><i className="fa fa-clock-o"></i></a>
+        </li>
+        <li className={(this.props.selected === 2) ? 'active tip' : 'tip'} data-tip="Invitation Revocation/Permissions Tab">
+          <a href="#invitationlist"><i className="fa fa-link"></i></a>
+        </li>
       </ul>
     )
   }
@@ -170,7 +227,7 @@ var Profile = React.createClass({
   render: function(){
     return (
       <div onClick={this.onClick} className={["Profile", this.props.selected].join(' ')} >
-        <div className="avatar"></div>
+        <div className={"avatar user-" + this.props.user.index}></div>
         <div className="details">
           <div className="username">{ this.props.user.name }</div>
           <div className="email">{ this.props.user.email }</div>
@@ -197,7 +254,7 @@ var SmallProfile = React.createClass({
   render: function(){
     return (
       <div onClick={this.onClick} className={["SmallProfile", "Profile", this.props.selected].join(' ')} >
-        <div className="avatar"></div>
+        <div className={"avatar user-" + this.props.user.index}></div>
         <div className="details">
           <div className="username">{ this.props.user.name }</div>
           <div className="email">{ this.props.user.email }</div>
@@ -207,34 +264,31 @@ var SmallProfile = React.createClass({
   }
 })
 
+var SpinnerView = React.createClass({
+  componentDidMount: function(){
+    var target = this.getDOMNode();
+    var spinner = new Spinner({
+      color: '#999',
+      width: 4,
+      lines: 13,
+      corners: 1.0,
+      trail: 60
+    }).spin(target);
+  },
+  render: function(){
+    return (
+      <div className="SpinnerView"></div>
+    )
+  }
+});
+
 var NewCallView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
-  getTimeFromRange: function(position) {
-    var minp = 1;
-    var maxp = 100;
-
-    var minv = Math.log(60);
-    var maxv = Math.log(44640);
-
-    var scale = (maxv-minv) / (maxp-minp);
-    var scaled = Math.exp(minv + scale*(position-minp));
-
-    var dur = moment.duration(scaled, 'minutes');
-    if(dur.asMinutes() > 60*24)
-    {
-      var num = parseInt(dur.asDays(), 10);
-      var plural = num > 1 ? 's' : '';
-      return  num + ' day' + plural;
-    } else {
-      var num = parseInt(dur.asHours(), 10) + 1;
-      var plural = num > 1 ? 's' : '';
-      return  num + ' hour' + plural;
-    }
-  },
   getInitialState: function(){
     return {
       callDuration: 15,
       hasLink: false,
+      gettingLink: false,
       callName: ''
     }
   },
@@ -243,12 +297,19 @@ var NewCallView = React.createClass({
       $(this.refs.callerNameInput.getDOMNode()).addClass('error').focus();
       return;
     }
-    this.setState({
-      hasLink: true
-    })
+    var view = this;
+    view.setState({
+      gettingLink: true
+    });
+    this.timer = setTimeout(function(){
+      view.setState({
+        hasLink: true,
+        gettingLink: false
+      });
+    }, linkGenerationTime);
   },
   componentDidUpdate: function(){
-    if(this.state.callName != '' && !this.state.hasLink) {
+    if(this.state.callName != '' && !this.state.hasLink && !this.state.gettingLink) {
       $(this.refs.callerNameInput.getDOMNode()).removeClass('error');
     }
   },
@@ -257,8 +318,10 @@ var NewCallView = React.createClass({
     this.cancelCall();
   },
   cancelCall: function() {
+    clearTimeout(this.timer);
     this.setState({
       hasLink: false,
+      gettingLink: false,
       callName: '',
       callDuration: 15
     });
@@ -271,12 +334,21 @@ var NewCallView = React.createClass({
           <BackButton onClick={this.goBack}/>
           <h3>{STRINGS.shareThisLinkWith} { this.state.callName }</h3>
           <input value={STRINGS.sampleCallURL}></input>
-          <h5><i className="fa fa-clock-o"></i> Expires in { this.getTimeFromRange(this.state.callDuration) }</h5>
+          <h5><i className="fa fa-clock-o"></i> Expires in { getTimeFromRange(this.state.callDuration) }</h5>
           <div className="ButtonGroup">
             <Button text="Copy" style="default"/>
             <Button text="Share" style="default"/>
             <Button onClick={this.cancelCall} text="Cancel" style="cancel"/>
           </div>
+        </div>
+      )
+    } else if (this.state.gettingLink) {
+      return (
+        <div className="NewCallView">
+          <BackButton onClick={this.goBack}/>
+          <h3 className="center">Generating Invitation for { this.state.callName }</h3>
+          <SpinnerView />
+          <Button onClick={this.cancelCall} text="Cancel" style="cancel"/>
         </div>
       )
     } else {
@@ -285,7 +357,7 @@ var NewCallView = React.createClass({
           <BackButton onClick={this.goBack}/>
           <h3>New Invitation</h3>
           <input ref="callerNameInput" valueLink={this.linkState('callName')} placeholder={STRINGS.callNamePlaceholder}></input>
-          <h5><i className="fa fa-clock-o"></i> {STRINGS.inviteExpireIn} { this.getTimeFromRange(this.state.callDuration) }.</h5>
+          <h5><i className="fa fa-clock-o"></i> {STRINGS.inviteExpireIn} { getTimeFromRange(this.state.callDuration) }.</h5>
           <input valueLink={this.linkState('callDuration')} type="range" name="time" min="1" max="100"></input>
           <Button onClick={this.onClick} style="action" text={STRINGS.getLinkText}/>
         </div>
@@ -385,6 +457,73 @@ var Panel = React.createClass({
   }
 });
 
+var Window = React.createClass({
+  render: function() {
+    return (
+      <div className="Window">
+        <WindowTitlebar title={this.props.title} type={this.props.type}/>
+        <div className="WindowBody">
+          { this.props.children }
+        </div>
+      </div>
+    )
+  }
+});
+
+var WindowTitlebar = React.createClass({
+  render: function(){
+    return (
+      <div className={"WindowTitlebar " + this.props.type}>
+        <h5>{this.props.title}</h5>
+        <div className="WindowControls">
+        </div>
+      </div>
+    )
+  }
+});
+
+var CallControls = React.createClass({
+  render: function(){
+    return (
+      <div className="CallControls">
+       <i className="button end">{STRINGS.endCall}</i>
+       <i className="button active fa fa-video-camera"></i>
+       <i className="button fa fa-volume-up"></i>
+       <span className="right">2:45</span>
+      </div>
+    )
+  }
+});
+
+var VideoCall = React.createClass({
+  render: function(){
+    return (
+      <div className="VideoCall">
+        <CallControls/>
+        <div className="VideoScreen">
+          <div className="VideoScreenInner">
+          </div>
+        </div>
+      </div>
+    )
+  }
+});
+
+var IncomingCall = React.createClass({
+  render: function(){
+    return (
+      <div className="IncomingCall">
+        <div className="avatar"></div>
+        <h3>Aubrey Drake Graham</h3>
+        <div className="ButtonGroup">
+          <Button text="Ignore" style="cancel"/>
+          <Button text="Answer" style="action"/>
+        </div>
+      </div>
+    )
+  }
+});
+
 var Header = React.createClass({
   getDefaultProps: function(){
     return {
@@ -430,9 +569,9 @@ var HistoryList = React.createClass({
         </div>
         <ul className="CallHistory">
           {_.range(10).map(function(i){
-            var u = getRandomInt(0, _users.length -1);
-            var callType = getRandomInt(0, 1) === 1 ? 'incoming' : 'outgoing';
-            var missed = getRandomInt(0, 3) === 1 ? 'missed' : 'accepted';
+            var u = _.random(0, _users.length -1);
+            var callType = _.random(0, 1) === 1 ? 'incoming' : 'outgoing';
+            var missed = _.random(0, 3) === 1 ? 'missed' : 'accepted';
             var icon, callIcon;
             if(missed === 'missed') {
               icon = <i className="fa fa-times-circle"></i>
@@ -454,6 +593,78 @@ var HistoryList = React.createClass({
               </li>
             )
           })}
+        </ul>
+      </div>
+    )
+  }
+});
+
+var Invitation = React.createClass({
+  render: function() {
+
+    if(this.props.invite.isActive){
+      var divStyle = {
+        width: this.props.invite.completed*90 + '%'
+      }
+      return (
+        <li className="Invitation active">
+          <h3>{this.props.invite.email} <small>http://lo.op/8dj8d38</small></h3>
+          <div className="expiryInfo">
+            <h5>
+              <small>3:51pm May 12, 2014</small>
+            </h5>
+            <div>
+              <div className="progressWrapper">
+                <div className="progressBar" style={divStyle}></div>
+              </div>
+              <h5 className="align-right"><i className="fa fa-clock-o"></i> {getTimeFromRange(this.props.invite.totalTime)} left.</h5>
+            </div>
+          </div>
+          <div className="icons right">
+            Revoke Invitation
+          </div>
+        </li>
+      )
+    } else {
+      return (
+        <li className="Invitation expired">
+          <h3>{this.props.invite.email}</h3>
+          <div className="expiryInfo">
+            <h5>{STRINGS.expired}.</h5>
+          </div>
+        </li>
+      )
+    }
+  }
+});
+
+var InvitationList = React.createClass({
+  render: function(){
+    var invites = _.sortBy(_.range(5).map(function(i){
+      var u = _.random(0, _users.length -1);
+      var isActive = _.random(0, 3) === 1 ? false : true;
+      var time = _.random(0, 100);
+      var completed = Math.random();
+      return _.extend(_users[u], {
+        totalTime: time,
+        completed: completed,
+        isActive: isActive
+      });
+    }), function(invite){
+      return !invite.isActive;
+    });
+
+    var inviteView = function(inv, index){
+      return (<Invitation key={"Invite" + index} invite={inv} />)
+    }.bind(this);
+
+    return (
+      <div className="InvitationList">
+        <div className="Header">
+          <div>{STRINGS.invitationList}</div>
+        </div>
+        <ul className="Invitations">
+          { invites.map(inviteView) }
         </ul>
       </div>
     )
@@ -512,28 +723,106 @@ var CallHistory = React.createClass({
   }
 });
 
+var InvitationManagement = React.createClass({
+  render: function() {
+    return (
+        <BaseState name={ this.props.name } index={ this.props.index }>
+          <TabBar selected={this.props.tab} />
+          <Panel items={ this.props.items }>
+            <InvitationList/>
+          </Panel>
+        </BaseState>
+    );
+  }
+});
+
+var InCallActive = React.createClass({
+  render: function() {
+    return (
+        <BaseStateCorner name={ this.props.name } index={ this.props.index }>
+          <Window items={ this.props.items } title="Aubrey Drake Graham">
+            <VideoCall />
+          </Window>
+        </BaseStateCorner>
+    );
+  }
+});
+
+var IncomingCallView = React.createClass({
+  render: function() {
+    return (
+        <BaseStateCorner name={ this.props.name } index={ this.props.index }>
+          <Window items={ this.props.items } title="Call from Aubrey Drake Graham" type="">
+            <IncomingCall />
+          </Window>
+        </BaseStateCorner>
+    );
+  }
+});
+
+var ContactsDocked = React.createClass({
+  render: function() {
+    return (
+        <BaseStateCorner name={ this.props.name } index={ this.props.index }>
+          <Window items={ this.props.items } title="Contacts">
+            <BuddyList items={this.props.items} />
+          </Window>
+        </BaseStateCorner>
+    );
+  }
+});
+
 var states = [
   {
     name: 'Precall - Not Signed In',
     view: PrecallNotSignedIn,
-    tab: 0
+    tab: 0,
+    slug: 'precall'
   },
   {
     name: 'Precall - Signed In',
     view: PrecallSignedIn,
-    tab: 0
+    tab: 0,
+    slug: 'precall-signedin'
   },
   {
     name: 'Call History',
     view: CallHistory,
-    tab: 1
+    tab: 1,
+    slug: 'callhistory'
+  },
+  {
+    name: 'Invitation Management',
+    view: InvitationManagement,
+    tab: 2,
+    slug: 'invitationlist'
+  },
+  {
+    name: 'Contacts - Docked',
+    view: ContactsDocked,
+    tab: 0,
+    slug: 'contacts-docked'
+  },
+  {
+    name: 'In Call - Active',
+    view: InCallActive,
+    tab: 1,
+    slug: 'call-active'
+  },
+  {
+    name: 'Incoming Call',
+    view: IncomingCallView,
+    tab: 1,
+    slug: 'call-incoming'
   }
 ];
 
-setTimeout(function() {
+setTimeout(function(){
   _.each(states, function(state, index){
+
       var el = $('<div/>', {
-        class: 'component-wrapper'
+        class: 'component-wrapper',
+        id: state.slug
       })[0];
 
       $('#wrapper').append(el);

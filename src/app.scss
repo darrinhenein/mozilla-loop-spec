@@ -1,3 +1,13 @@
+$green: #40CA19;
+$lightGreen: #49DB2B;
+$red: #C14218;
+$lightRed: #D74A1B;
+$blue: #4285F4;
+$darkBlue: #669BD7;
+$lightBlue: #5A94F5;
+$panelBackground: #F5F5F5;
+$white75: rgba(255, 255, 255, 0.75);
+
 body {
   font-family: 'Lucida Grande', sans-serif;
   color: #1D1D1D;
@@ -14,6 +24,12 @@ body {
   border: 0;
 }
 
+.SpinnerView {
+  width: 100%;
+  height: 70px;
+  position: relative;
+}
+
 #wrapper {
   padding-bottom: 400px;
   display: flex;
@@ -24,13 +40,27 @@ body {
   margin-bottom: 100px;
 }
 
+.Browser {
+  border-right: 1px solid #DDD;
+  border-bottom: 1px solid #DDD;
+  border-bottom-right-radius: 4px;
+  box-shadow: 3px 3px 2px #F5F5F5;
+  padding-right: 70px;
+  padding-top: 70px;
+  min-height: 200px;
+  min-width: 400px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
 a {
   /*font-weight: bold;*/
   text-decoration: underline;
-  color: #72A8E6;
+  color: $blue;
   cursor: pointer;
   &:hover {
-    color: #669BD7;
+    color: $darkBlue;
   }
 }
 
@@ -53,6 +83,14 @@ h1 {
     font-size: 80%;
     float: right;
   }
+}
+
+h3.center {
+  text-align: center;
+}
+
+h5.align-right {
+  text-align: right;
 }
 
 h5 {
@@ -158,14 +196,114 @@ h5 {
   background: #333;
 }
 
-.Panel {
+.Panel, .Window {
   box-shadow: 1px 0 0 rgba(0, 0, 0, 0.1);
   float: left;
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #F5F5F5;
+  background: $panelBackground;
   transition: opacity 0.3s ease-in-out;
+}
+
+.WindowWrapper {
+  display: flex;
+  box-shadow: 0 0 4px rgba(0,0,0,0.2);
+  flex-direction: column;
+  position: relative;
+  border-radius: 4px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  overflow: hidden;
+  width: 350px;
+}
+
+.Window {
+  .WindowTitlebar {
+    padding: 0 10px;
+    background: $darkBlue;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    &.incoming {
+      background: $green;
+    }
+    h5 {
+      color: #FFF;
+      font-size: 11px;
+    }
+    .WindowControls {
+      display: flex;
+      margin-left: auto;
+      background: url('images/window-controls.svg') no-repeat center right;
+      opacity: 0.8;
+      background-size: 75%;
+      width: 25%;
+      height: 100%;
+      transition: opacity 0.3s ease-in-out;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.VideoCall {
+  position: relative;
+  display: flex;
+  .VideoScreen {
+    height: 240px;
+    width: 100%;
+    background: url('images/drake.png') no-repeat #333;
+    background-size: cover;
+    position: relative;
+    .VideoScreenInner {
+      position: absolute;
+      z-index: 1000;
+      background: url('images/kanye.png') no-repeat #333;
+      background-size: cover;
+      right: 5px;
+      bottom: 5px;
+      width: 40%;
+      height: 40%;
+      box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+    }
+  }
+}
+
+.CallControls {
+  position: absolute;
+  top: 0;
+  height: 22px;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(0,0,0,0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  .right {
+    margin-left: auto;
+    font-size: 12px;
+    color: #FFF;
+    padding-right: 10px;
+  }
+  .button {
+    color: #DDD;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    &.active {
+      color: $blue;
+    }
+    &.end {
+      color: #FFF;
+      background: rgba(193, 56, 24, 0.85);
+      &:hover {
+        background: rgba(193, 56, 24, 1.0)
+      }
+    }
+  }
 }
 
 .BackButton {
@@ -188,7 +326,8 @@ h5 {
 }
 
 .Header {
-  padding: 20px;
+  padding: 20px 10px;
+  padding-bottom: 10px;
   font-size: 12px;
   display: flex;
   flex-direction: column;
@@ -222,8 +361,9 @@ h5 {
 .List {
   display: flex;
   flex-direction: column;
+  padding-top: 10px;
   .scrollable {
-    max-height: 300px;
+    max-height: 250px;
     overflow: scroll;
   }
 }
@@ -261,28 +401,25 @@ h5 {
 
 .Button {
   &.action {
-    background: #40CA19;
-    /*border: 1px solid #40B71D;*/
+    background: $green;
     &:hover {
-      background: #49DB2B;
+      background: $lightGreen;
     }
     &.cancel {
-      background: #D74A1B;
-      border-color: #C14218;
+      background: $red;
+      border-color: $lightRed;
     }
   }
   &.cancel {
-    background: #D74A1B;
-    border-color: #C14218;
+    background: $red;
   }
   &.action.cancel:hover, &.cancel:hover {
-    background: #E76236;
+    background: $lightRed;
   }
   &.default {
-    background: #19A1CA;
-    /*border: 1px solid #168EB2;*/
+    background: $blue;
     &:hover {
-      background: #27B4DE;
+      background: $lightBlue;
     }
   }
 }
@@ -309,8 +446,7 @@ h5 {
     padding: 13px 10px 0;
     border-radius: 0px;
     border-bottom-right-radius: 4px;
-    background: #3879D9;
-    border-bottom: 2px solid #2B64B7;
+    background: $blue;
     color: #FFF;
     cursor: pointer;
     text-align: center;
@@ -359,8 +495,8 @@ input {
   border: 1px solid #CCC;
   margin: 5px 0;
   &.error {
-    border-color: #D74A1B;
-    box-shadow: 0 0 4px #D74A1B;
+    border-color: $red;
+    box-shadow: 0 0 4px $lightRed;
   }
   &[type=range] {
     border: none;
@@ -389,16 +525,36 @@ input {
   height: 24px;
   flex: 24px;
   padding: 0 10px;
-  margin: 0 20px 10px 20px;
+  margin: 0 10px 10px 10px;
   border: 1px solid #CCC;
   color: #BBB;
+  box-shadow: inset 0 1px 1px #EEE;
+}
+
+.icons {
+  cursor: pointer;
+  visibility: hidden;
+  margin-left: auto;
+  padding: 12px 10px;
+  border-radius: 30px;
+  background: #7ED321;
+  color: rgba(255, 255, 255, 0.8);
+  &:hover {
+    background: #89E029;
+  }
+  i {
+    margin: 0 5px 0 5px;
+    &.fa-video-camera {
+      color: #FFF;
+    }
+  }
 }
 
 .Profile {
   display: flex;
   flex-direction: row;
   position: relative;
-  padding: 10px;
+  padding: 5px 10px;
   color: #666;
   font-size: 13px;
   border-top: 1px solid #DDD;
@@ -411,24 +567,6 @@ input {
   }
   &:hover .icons {
     visibility: visible;
-  }
-  .icons {
-    cursor: pointer;
-    visibility: hidden;
-    margin-left: auto;
-    padding: 12px 10px;
-    border-radius: 30px;
-    background: #7ED321;
-    color: rgba(255, 255, 255, 0.8);
-    &:hover {
-      background: #89E029;
-    }
-    i {
-      margin: 0 5px 0 5px;
-      &.fa-video-camera {
-        color: #FFF;
-      }
-    }
   }
   .Dropdown {
     position: absolute;
@@ -464,6 +602,27 @@ input {
     border-radius: 50%;
     margin-right: 10px;
     overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    &.user-1 {
+      background: url('images/user-5.jpg');
+      background-size: contain;
+    }
+    &.user-2 {
+      background: url('images/user-1.jpg');
+      background-size: contain;
+    }
+    &.user-3 {
+      background: url('images/user-3.jpg');
+      background-size: contain;
+    }
+    &.user-4 {
+      background: url('images/user-4.jpg');
+      background-size: contain;
+    }
+    &.user-0 {
+      background: url('images/user-2.jpg');
+      background-size: contain;
+    }
     img {
       width: 100%;
     }
@@ -474,7 +633,7 @@ input {
   }
   .email {
     opacity: 0.6;
-    font-size: 12px;
+    font-size: 11px;
   }
 }
 
@@ -504,11 +663,14 @@ input {
     border-right: 1px solid #CCC;
     padding: 0 10px;
     cursor: pointer;
-    &:hover {
+    a i {
+      color: #CCC;
+    }
+    &:hover i {
       color: #444;
     }
-    &.active {
-      color: #4285F4;
+    &.active i {
+      color: $blue;
     }
     &:last-child {
       border-right: 0;
@@ -516,7 +678,7 @@ input {
   }
 }
 
-.HistoryList .Header {
+.HistoryList .Header, .InvitationList .Header {
   padding: 5px 10px;
   color: #888;
   margin: 0;
@@ -562,13 +724,110 @@ input {
       margin-left: auto;
     }
     &.accepted .fa {
-      color: #40CA19;
+      color: $green;
     }
     &.missed .fa {
-      color: #D74A1B;
+      color: $red;
     }
     &:hover {
       background: #EEE;
+    }
+  }
+}
+
+.InvitationList {
+  overflow: hidden;
+  .Invitation {
+    padding: 10px 10px;
+    border-bottom: 1px solid #DDD;
+    position: relative;
+    &:hover {
+      background: #EEE;
+      cursor: pointer;
+    }
+
+    h3 small {
+      font-style: italic;
+      // text-decoration: underline;
+      font-size: 10px;
+      font-weight: normal;
+      float: right;
+    }
+
+    transition: transform 0.2s ease-in-out;
+    &.active:hover {
+      transform: translate3d(-110px, 0, 0);
+    }
+
+    .progressWrapper {
+      background: #DDD;
+      height: 7px;
+      flex: 1;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 5px;
+      .progressBar {
+        height: 100%;
+        background: $blue;
+      }
+    }
+
+    .icons {
+      background: transparent;
+      color: $red;
+      padding: 0px 0px 3px 10px;
+      flex: 0 0 18px !important;
+    }
+
+    .icons.right{
+      width: 100px;
+      left: 100%;
+      top: 0;
+      bottom: 0;
+      box-shadow: 0 1px 0 #DDD;
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      visibility: visible;
+      background: $red;
+      position: absolute;
+      color: #FFF;
+      font-size: 11px;
+      &:hover {
+        background: $lightRed;
+      }
+      i {
+        text-align: left;
+        margin: 0;
+        width: 100%;
+      }
+    }
+
+    &:hover {
+      .icons {
+        visibility: visible;
+      }
+    }
+
+    &.expired {
+      h5, h3 {
+        color: #999;
+      }
+    }
+    .expiryInfo {
+      display: flex;
+      flex-direction: row;
+      div {
+        flex: 1
+      }
+      small {
+        font-size: 9px;
+      }
+      h5 {
+        margin: 0;
+        flex: 1;
+        line-height: 8px;
+      }
     }
   }
 }
@@ -586,6 +845,22 @@ input {
   .avatar {
     width: 24px;
     height: 24px;
+  }
+}
+
+
+.IncomingCall {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  .avatar {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    background: url('images/drake.png') no-repeat;
+    background-size: cover;
+    margin-bottom: 15px;
   }
 }
 
