@@ -3,9 +3,12 @@ _users = require('./models/users.js');
 STRINGS = require('./models/strings.js')
 Utils = require('./utils/utils.js');
 getTimeFromRange = Utils.getTimeFromRange;
+TableOfContents = require('./views/TableOfContents.jsx');
 
 PrecallNotSignedIn = require('./views/PrecallNotSignedIn.jsx');
+PrecallNotSignedInQuick = require('./views/PrecallNotSignedInQuick.jsx');
 PrecallSignedIn = require('./views/PrecallSignedIn.jsx');
+PrecallSignedInQuick = require('./views/PrecallSignedInQuick.jsx');
 CallHistory = require('./views/CallHistory.jsx');
 InvitationManagement = require('./views/InvitationManagement.jsx');
 InCallActive = require('./views/InCallActive.jsx');
@@ -14,14 +17,14 @@ IncomingCallView = require('./views/IncomingCallView.jsx');
 
 var states = [
   {
-    name: 'Precall - Not Signed In',
-    view: PrecallNotSignedIn,
+    name: 'Precall (Not Signed In)',
+    view: PrecallNotSignedInQuick,
     tab: 0,
     slug: 'precall'
   },
   {
-    name: 'Precall - Signed In',
-    view: PrecallSignedIn,
+    name: 'Precall (Signed In)',
+    view: PrecallSignedInQuick,
     tab: 0,
     slug: 'precall-signedin'
   },
@@ -38,13 +41,13 @@ var states = [
     slug: 'invitationlist'
   },
   {
-    name: 'Contacts - Docked',
+    name: 'Contacts (Docked)',
     view: ContactsDocked,
     tab: 0,
     slug: 'contacts-docked'
   },
   {
-    name: 'In Call - Active',
+    name: 'In Call (Active)',
     view: InCallActive,
     tab: 1,
     slug: 'call-active'
@@ -58,6 +61,7 @@ var states = [
 ];
 
 setTimeout(function(){
+  React.renderComponent(<TableOfContents items={states} />, $('#toc')[0]);
   _.each(states, function(state, index){
 
       var el = $('<div/>', {
@@ -74,5 +78,10 @@ setTimeout(function(){
         mode: 'top',
         speed: 200
       });
+
+      $('.TableOfContents').ddscrollSpy({
+        scrollduration: 0
+      });
+
   })
 }, 100);

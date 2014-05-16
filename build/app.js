@@ -4,9 +4,12 @@ _users = require('./models/users.js');
 STRINGS = require('./models/strings.js')
 Utils = require('./utils/utils.js');
 getTimeFromRange = Utils.getTimeFromRange;
+TableOfContents = require('./views/TableOfContents.jsx');
 
 PrecallNotSignedIn = require('./views/PrecallNotSignedIn.jsx');
+PrecallNotSignedInQuick = require('./views/PrecallNotSignedInQuick.jsx');
 PrecallSignedIn = require('./views/PrecallSignedIn.jsx');
+PrecallSignedInQuick = require('./views/PrecallSignedInQuick.jsx');
 CallHistory = require('./views/CallHistory.jsx');
 InvitationManagement = require('./views/InvitationManagement.jsx');
 InCallActive = require('./views/InCallActive.jsx');
@@ -15,14 +18,14 @@ IncomingCallView = require('./views/IncomingCallView.jsx');
 
 var states = [
   {
-    name: 'Precall - Not Signed In',
-    view: PrecallNotSignedIn,
+    name: 'Precall (Not Signed In)',
+    view: PrecallNotSignedInQuick,
     tab: 0,
     slug: 'precall'
   },
   {
-    name: 'Precall - Signed In',
-    view: PrecallSignedIn,
+    name: 'Precall (Signed In)',
+    view: PrecallSignedInQuick,
     tab: 0,
     slug: 'precall-signedin'
   },
@@ -39,13 +42,13 @@ var states = [
     slug: 'invitationlist'
   },
   {
-    name: 'Contacts - Docked',
+    name: 'Contacts (Docked)',
     view: ContactsDocked,
     tab: 0,
     slug: 'contacts-docked'
   },
   {
-    name: 'In Call - Active',
+    name: 'In Call (Active)',
     view: InCallActive,
     tab: 1,
     slug: 'call-active'
@@ -59,6 +62,7 @@ var states = [
 ];
 
 setTimeout(function(){
+  React.renderComponent(TableOfContents( {items:states} ), $('#toc')[0]);
   _.each(states, function(state, index){
 
       var el = $('<div/>', {
@@ -75,9 +79,15 @@ setTimeout(function(){
         mode: 'top',
         speed: 200
       });
+
+      $('.TableOfContents').ddscrollSpy({
+        scrollduration: 0
+      });
+
   })
 }, 100);
-},{"./models/strings.js":2,"./models/users.js":3,"./utils/utils.js":5,"./views/CallHistory.jsx":12,"./views/ContactsDocked.jsx":13,"./views/InCallActive.jsx":17,"./views/IncomingCallView.jsx":19,"./views/InvitationManagement.jsx":21,"./views/PrecallNotSignedIn.jsx":25,"./views/PrecallSignedIn.jsx":26}],2:[function(require,module,exports){
+
+},{"./models/strings.js":2,"./models/users.js":3,"./utils/utils.js":5,"./views/CallHistory.jsx":12,"./views/ContactsDocked.jsx":13,"./views/InCallActive.jsx":18,"./views/IncomingCallView.jsx":20,"./views/InvitationManagement.jsx":22,"./views/PrecallNotSignedIn.jsx":27,"./views/PrecallNotSignedInQuick.jsx":28,"./views/PrecallSignedIn.jsx":29,"./views/PrecallSignedInQuick.jsx":30,"./views/TableOfContents.jsx":36}],2:[function(require,module,exports){
 module.exports = {
   viewAccount: "View Account",
   signIn: "Sign In",
@@ -89,7 +99,7 @@ module.exports = {
   callingAs: "Calling as",
   searchPlaceholder: "Search...",
   getLinkText: "Get Link",
-  callNamePlaceholder: "Who are you calling?",
+  callNamePlaceholder: "Orange Prickly Badger",
   inviteExpireIn: "Invitation will expire in",
   sampleCallURL: "http://lo.op/nx3nd7h",
   shareThisLinkWith: "Share this link with",
@@ -99,6 +109,7 @@ module.exports = {
   expired: "Expired",
   endCall: "Hang Up"
 };
+
 },{}],3:[function(require,module,exports){
 module.exports = [
   {
@@ -276,7 +287,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"./Profile.jsx":27,"./SearchBar.jsx":28}],10:[function(require,module,exports){
+},{"./Profile.jsx":31,"./SearchBar.jsx":32}],10:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
@@ -319,7 +330,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":7,"./HistoryList.jsx":16,"./Panel.jsx":23,"./TabBar.jsx":31}],13:[function(require,module,exports){
+},{"./BaseState.jsx":7,"./HistoryList.jsx":17,"./Panel.jsx":25,"./TabBar.jsx":35}],13:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseStateCorner = require('./BaseStateCorner.jsx');
 BuddyList = require('./BuddyList.jsx');
@@ -336,13 +347,20 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseStateCorner.jsx":8,"./BuddyList.jsx":9,"./Window.jsx":33}],14:[function(require,module,exports){
+},{"./BaseStateCorner.jsx":8,"./BuddyList.jsx":9,"./Window.jsx":38}],14:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function(){
     return (
       React.DOM.div( {className:"Footer tip", 'data-tip':"Sign in to Firefox Account (or other)"}, 
-        this.props.linkText
+        React.DOM.div(null, 
+          React.DOM.a(null, 
+            this.props.username
+          )
+        ),
+        React.DOM.div( {className:"action"}, 
+          this.props.linkText
+        )
       )
     )
   }
@@ -368,8 +386,7 @@ module.exports = React.createClass({displayName: 'exports',
     return (
       React.DOM.div( {className:"Header"}, 
         React.DOM.h6(null, 
-           this.props.callingAsText,  " ", React.DOM.span( {className:"bold"}, this.props.username),".",
-          React.DOM.span( {className:"right"}, React.DOM.a(null, this.props.editText))
+           this.props.callingAsText,  " ", React.DOM.span( {className:"bold"}, React.DOM.a(null, this.props.username)),"."
         ),
         Button( {text:STRINGS.newCallButton, style:"action", onClick:this.onClick})
       )
@@ -378,6 +395,33 @@ module.exports = React.createClass({displayName: 'exports',
 });
 
 },{"./Button.jsx":10}],16:[function(require,module,exports){
+/** @jsx React.DOM */
+Button = require('./Button.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+  getDefaultProps: function(){
+    return {
+      username: STRINGS.loggedOutUsername,
+      callingAsText: STRINGS.callingAs,
+      editText: STRINGS.changeUsername,
+      linkText: STRINGS.signIn
+    }
+  },
+  onClick: function() {
+    $(this.getDOMNode()).trigger('PanelGroup', {type: 'toggle'});
+  },
+  render: function(){
+    return (
+      React.DOM.div( {className:"Header"}, 
+        React.DOM.h6( {className:"right"}, 
+          React.DOM.span( {className:"bold"}, React.DOM.a( {'data-tip':"Click to change how your name appears", className:"tip"}, this.props.username))
+        )
+      )
+    )
+  }
+});
+
+},{"./Button.jsx":10}],17:[function(require,module,exports){
 /** @jsx React.DOM */
 SmallProfile = require('./SmallProfile.jsx');
 
@@ -420,7 +464,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"./SmallProfile.jsx":29}],17:[function(require,module,exports){
+},{"./SmallProfile.jsx":33}],18:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseStateCorner = require('./BaseStateCorner.jsx');
 Window = require('./Window.jsx');
@@ -437,7 +481,7 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseStateCorner.jsx":8,"./VideoCall.jsx":32,"./Window.jsx":33}],18:[function(require,module,exports){
+},{"./BaseStateCorner.jsx":8,"./VideoCall.jsx":37,"./Window.jsx":38}],19:[function(require,module,exports){
 /** @jsx React.DOM */
 Button = require('./Button.jsx');
 
@@ -455,7 +499,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"./Button.jsx":10}],19:[function(require,module,exports){
+},{"./Button.jsx":10}],20:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseStateCorner = require('./BaseStateCorner.jsx');
 Window = require('./Window.jsx');
@@ -473,7 +517,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseStateCorner.jsx":8,"./IncomingCall.jsx":18,"./Window.jsx":33}],20:[function(require,module,exports){
+},{"./BaseStateCorner.jsx":8,"./IncomingCall.jsx":19,"./Window.jsx":38}],21:[function(require,module,exports){
 /** @jsx React.DOM */
 var Invitation = React.createClass({displayName: 'Invitation',
   render: function() {
@@ -546,7 +590,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 TabBar = require('./TabBar.jsx');
@@ -566,7 +610,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":7,"./InvitationList.jsx":20,"./Panel.jsx":23,"./TabBar.jsx":31}],22:[function(require,module,exports){
+},{"./BaseState.jsx":7,"./InvitationList.jsx":21,"./Panel.jsx":25,"./TabBar.jsx":35}],23:[function(require,module,exports){
 /** @jsx React.DOM */
 SpinnerView = require('./SpinnerView.jsx');
 BackButton = require('./BackButton.jsx');
@@ -656,7 +700,67 @@ module.exports= React.createClass({displayName: 'exports',
     }
   }
 });
-},{"./BackButton.jsx":6,"./Button.jsx":10,"./SpinnerView.jsx":30}],23:[function(require,module,exports){
+},{"./BackButton.jsx":6,"./Button.jsx":10,"./SpinnerView.jsx":34}],24:[function(require,module,exports){
+/** @jsx React.DOM */
+SpinnerView = require('./SpinnerView.jsx');
+Button = require('./Button.jsx');
+var linkGenerationTime = 1000;
+
+module.exports= React.createClass({displayName: 'exports',
+  mixins: [React.addons.LinkedStateMixin],
+  getInitialState: function(){
+    return {
+      callDuration: 15,
+      callName: '',
+      isCustomizing: false,
+      customizeText: 'Customize',
+      arrow: '▸'
+    }
+  },
+  onClick: function() {
+    $(this.refs.customizePanel.getDOMNode()).toggleClass('opened');
+    this.setState({
+      isCustomizing: !this.state.isCustomizing
+    })
+  },
+  componentDidUpdate: function(){
+    if(this.state.callName != '') {
+      $(this.refs.callerNameInput.getDOMNode()).removeClass('error');
+    }
+  },
+  cancelCall: function() {
+    clearTimeout(this.timer);
+    this.setState({
+      isCustomizing: false,
+      callName: '',
+      callDuration: 15
+    });
+  },
+  render: function(){
+    var linkSection;
+      return (
+        React.DOM.div( {className:"NewCallView Quick"}, 
+          React.DOM.h3(null, "Share this link to invite someone to talk:"),
+          React.DOM.div( {className:"inputControls"}, 
+            React.DOM.input( {value:STRINGS.sampleCallURL}),
+            React.DOM.span( {onClick:this.onClick}, React.DOM.i( {className:"fa fa-cog " + this.state.isCustomizing}))
+          ),
+          React.DOM.div( {className:"Customize", ref:"customizePanel"}, 
+            React.DOM.h5(null, "Invitation Name"),
+            React.DOM.input( {ref:"callerNameInput", valueLink:this.linkState('callName'), placeholder:STRINGS.callNamePlaceholder}),
+            React.DOM.h5(null, React.DOM.i( {className:"fa fa-clock-o"}), " ", STRINGS.inviteExpireIn, " ",  getTimeFromRange(this.state.callDuration), "."),
+            React.DOM.input( {valueLink:this.linkState('callDuration'), type:"range", name:"time", min:"1", max:"100"})
+          ),
+          React.DOM.div( {className:"ButtonGroup"}, 
+            Button( {text:"Share", style:"default"}),
+            Button( {text:"Copy", style:"default"})
+          )
+        )
+      )
+  }
+});
+
+},{"./Button.jsx":10,"./SpinnerView.jsx":34}],25:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
@@ -667,7 +771,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /** @jsx React.DOM */
 
 _animationDefaults = require('../utils/defaults.js').animation;
@@ -727,7 +831,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 })
-},{"../utils/defaults.js":4}],25:[function(require,module,exports){
+},{"../utils/defaults.js":4}],27:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 PanelGroup = require('./PanelGroup.jsx');
@@ -755,7 +859,30 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseState.jsx":7,"./Footer.jsx":14,"./Header.jsx":15,"./NewCallView.jsx":22,"./Panel.jsx":23,"./PanelGroup.jsx":24,"./TabBar.jsx":31}],26:[function(require,module,exports){
+},{"./BaseState.jsx":7,"./Footer.jsx":14,"./Header.jsx":15,"./NewCallView.jsx":23,"./Panel.jsx":25,"./PanelGroup.jsx":26,"./TabBar.jsx":35}],28:[function(require,module,exports){
+/** @jsx React.DOM */
+BaseState = require('./BaseState.jsx');
+TabBar = require('./TabBar.jsx');
+Panel = require('./Panel.jsx');
+HeaderQuick = require('./HeaderQuick.jsx');
+NewCallViewQuick = require('./NewCallViewQuick.jsx');
+Footer = require('./Footer.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+  render: function() {
+    return (
+        BaseState( {name: this.props.name,  index: this.props.index }, 
+          TabBar( {selected:this.props.tab} ),
+            Panel( {items: this.props.items }, 
+              NewCallViewQuick(null),
+              Footer( {linkText:STRINGS.signIn, username:STRINGS.loggedOutUsername})
+            )
+        )
+    );
+  }
+});
+
+},{"./BaseState.jsx":7,"./Footer.jsx":14,"./HeaderQuick.jsx":16,"./NewCallViewQuick.jsx":24,"./Panel.jsx":25,"./TabBar.jsx":35}],29:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 PanelGroup = require('./PanelGroup.jsx');
@@ -784,7 +911,31 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseState.jsx":7,"./Footer.jsx":14,"./Header.jsx":15,"./NewCallView.jsx":22,"./Panel.jsx":23,"./PanelGroup.jsx":24,"./TabBar.jsx":31}],27:[function(require,module,exports){
+},{"./BaseState.jsx":7,"./Footer.jsx":14,"./Header.jsx":15,"./NewCallView.jsx":23,"./Panel.jsx":25,"./PanelGroup.jsx":26,"./TabBar.jsx":35}],30:[function(require,module,exports){
+/** @jsx React.DOM */
+BaseState = require('./BaseState.jsx');
+TabBar = require('./TabBar.jsx');
+Panel = require('./Panel.jsx');
+HeaderQuick = require('./HeaderQuick.jsx');
+Footer = require('./Footer.jsx');
+NewCallView = require('./NewCallView.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+  render: function() {
+    return (
+        BaseState( {name: this.props.name,  index: this.props.index }, 
+          TabBar( {selected:this.props.tab} ),
+          Panel( {items: this.props.items }, 
+            NewCallViewQuick(null),
+            BuddyList( {items:this.props.items} ),
+            Footer( {linkText:STRINGS.signOut, username:STRINGS.loggedInUsername})
+          )
+        )
+    );
+  }
+});
+
+},{"./BaseState.jsx":7,"./Footer.jsx":14,"./HeaderQuick.jsx":16,"./NewCallView.jsx":23,"./Panel.jsx":25,"./TabBar.jsx":35}],31:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   getInitialState: function() {
@@ -833,7 +984,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 })
-},{}],28:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function(){
@@ -846,7 +997,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{}],29:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   onClick: function(){
@@ -865,7 +1016,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 })
 
-},{}],30:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   componentDidMount: function(){
@@ -884,7 +1035,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],31:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
@@ -903,7 +1054,23 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],32:[function(require,module,exports){
+
+},{}],36:[function(require,module,exports){
+/** @jsx React.DOM */
+module.exports = React.createClass({displayName: 'exports',
+  render: function(){
+    var linkView = function(item, index){
+      return (React.DOM.a( {href:"#" + item.slug}, item.name))
+    }.bind(this);
+
+    return (
+      React.DOM.div( {ref:"container", className:"TableOfContents"}, 
+        this.props.items.map(linkView)
+      )
+    )
+  }
+});
+},{}],37:[function(require,module,exports){
 /** @jsx React.DOM */
 CallControls = require('./CallControls.jsx');
 
@@ -921,7 +1088,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./CallControls.jsx":11}],33:[function(require,module,exports){
+},{"./CallControls.jsx":11}],38:[function(require,module,exports){
 /** @jsx React.DOM */
 var WindowTitlebar = React.createClass({displayName: 'WindowTitlebar',
   render: function(){

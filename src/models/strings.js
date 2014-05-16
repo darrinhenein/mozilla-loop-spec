@@ -9,7 +9,7 @@ module.exports = {
   callingAs: "Calling as",
   searchPlaceholder: "Search...",
   getLinkText: "Get Link",
-  callNamePlaceholder: "Who are you calling?",
+  callNamePlaceholder: "Orange Prickly Badger",
   inviteExpireIn: "Invitation will expire in",
   sampleCallURL: "http://lo.op/nx3nd7h",
   shareThisLinkWith: "Share this link with",
