@@ -9,8 +9,8 @@ module.exports = React.createClass({
         <li className={(this.props.selected === 1) ? 'active tip' : 'tip'} data-tip="Call History Tab">
           <a href="#callhistory"><i className="fa fa-clock-o"></i></a>
         </li>
-        <li className={(this.props.selected === 2) ? 'active tip' : 'tip'} data-tip="Invitation Revocation/Permissions Tab">
-          <a href="#invitationlist"><i className="fa fa-link"></i></a>
+        <li className={(this.props.selected === 2) ? 'active tip' : 'tip'} data-tip="Contacts">
+          <a href="#contacts"><i className="fa fa-book"></i></a>
         </li>
       </ul>
     )

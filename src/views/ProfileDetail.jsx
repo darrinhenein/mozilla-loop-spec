@@ -1,14 +1,8 @@
 /** @jsx React.DOM */
 module.exports = React.createClass({
   getInitialState: function() {
-    var callType = Math.random() > 0.5 ? 'Video call' : 'Audio call';
-    var callTime = moment().subtract('minutes', Math.random()*6000);
-    var callIcon = callType === 'Video call' ? 'fa-video-camera' : 'fa-phone';
     return {
       isDropdownVisible: false,
-      callType: callType,
-      callIcon: callIcon,
-      callTime: callTime
     }
   },
   onClick: function(){
@@ -37,8 +31,7 @@ module.exports = React.createClass({
         <div className="details">
           <div className="username">{ this.props.user.name } <i className={this.props.user.isGoogle ? 'fa fa-google' : ''}></i></div>
           <div className="email">
-            <i className={"fa " + this.state.callIcon} ></i>
-            { this.state.callTime.calendar()}
+            { this.props.user.email }
           </div>
         </div>
         <div className="icons" onClick={this.toggleDropdown}>

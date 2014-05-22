@@ -2,15 +2,25 @@
 SmallProfile = require('./SmallProfile.jsx');
 
 module.exports = React.createClass({
+  getInitialState: function(){
+    return {
+      numItems: 10
+    }
+  },
+  clearList: function(){
+    this.setState({
+      numItems: 0
+    });
+  },
   render: function(){
     return (
       <div className="HistoryList">
         <div className="Header">
           <div>{STRINGS.callHistory}</div>
-          <div className="Button">{STRINGS.clearHistory}</div>
+          <div onClick={this.clearList} className="Button">{STRINGS.clearHistory}</div>
         </div>
         <ul className="CallHistory">
-          {_.range(10).map(function(i){
+          {_.range(this.state.numItems).map(function(i){
             var u = _.random(0, _users.length -1);
             var callType = _.random(0, 1) === 1 ? 'incoming' : 'outgoing';
             var missed = _.random(0, 3) === 1 ? 'missed' : 'accepted';

@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 SearchBar = require('./SearchBar.jsx');
 Profile = require('./Profile.jsx');
+ProfileDetail = require('./ProfileDetail.jsx');
+Button = require('./Button.jsx');
+Defaults = require('../utils/defaults');
 
 module.exports = React.createClass({
   getInitialState: function(){
@@ -28,7 +31,11 @@ module.exports = React.createClass({
 
     var viewForItem = function(item, index){
       var isSelected = (this.state.selectedIndex === index) ? 'selected' : null;
-      return <Profile onClick={onClick} key={index} user={item} selected={isSelected} />
+      if(this.props.detail) {
+        return <ProfileDetail onClick={onClick} key={index} user={item} selected={isSelected} />
+      } else {
+        return <Profile onClick={onClick} key={index} user={item} selected={isSelected} />
+      }
     }.bind(this);
 
     var shownItems = this.props.items;
@@ -42,11 +49,11 @@ module.exports = React.createClass({
     }
 
     return (
-      <div className="List">
-        <SearchBar ref="filterSearchBar" val={this.state.filterText} handleChange={this.handleChange} />
-        <ul className="scrollable">
-         {shownItems.map(viewForItem)}
-        </ul>
+      <div className={"List " + (this.props.faded ? 'faded': '')}>
+          <SearchBar isOpen={this.state.isOpen} onClick={this.togglePanel} ref="filterSearchBar" val={this.state.filterText} handleChange={this.handleChange} />
+          <ul className="scrollable">
+           {shownItems.map(viewForItem)}
+          </ul>
       </div>
     )
   }

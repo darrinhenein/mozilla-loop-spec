@@ -4,12 +4,11 @@ Button = require('./Button.jsx');
 module.exports = React.createClass({
   render: function(){
     return (
-      <div className="IncomingCall">
+      <div className="OutgoingCall">
         <div className="avatar"></div>
-        <h3>Aubrey Drake Graham</h3>
+        <h3>Kanye West</h3>
         <div className="ButtonGroup">
-          <Button text="Ignore ▾" style="cancel"/>
-          <Button text="Answer" style="action"/>
+          <Button text="Cancel" style="default"/>
         </div>
       </div>
     )

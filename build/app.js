@@ -13,8 +13,22 @@ PrecallSignedInQuick = require('./views/PrecallSignedInQuick.jsx');
 CallHistory = require('./views/CallHistory.jsx');
 InvitationManagement = require('./views/InvitationManagement.jsx');
 InCallActive = require('./views/InCallActive.jsx');
+InCallActiveAudio = require('./views/InCallActiveAudio.jsx');
 ContactsDocked = require('./views/ContactsDocked.jsx');
+ContactsView = require('./views/ContactsView.jsx');
 IncomingCallView = require('./views/IncomingCallView.jsx');
+OutgoingCallView = require('./views/OutgoingCallView.jsx');
+
+moment.lang('en', {
+  calendar : {
+    lastDay : '[Yesterday at] LT',
+    sameDay : '[Today at] LT',
+    nextDay : '[Tomorrow at] LT',
+    lastWeek : 'l [at] LT',
+    nextWeek : 'l [at] LT',
+    sameElse : 'L'
+  }
+});
 
 var states = [
   {
@@ -30,34 +44,40 @@ var states = [
     slug: 'precall-signedin'
   },
   {
+    name: 'Contacts',
+    view: ContactsView,
+    tab: 2,
+    slug: 'contacts'
+  },
+  {
     name: 'Call History',
     view: CallHistory,
     tab: 1,
     slug: 'callhistory'
   },
   {
-    name: 'Invitation Management',
-    view: InvitationManagement,
-    tab: 2,
-    slug: 'invitationlist'
-  },
-  {
-    name: 'Contacts (Docked)',
-    view: ContactsDocked,
-    tab: 0,
-    slug: 'contacts-docked'
-  },
-  {
-    name: 'In Call (Active)',
+    name: 'In Call (Video)',
     view: InCallActive,
     tab: 1,
     slug: 'call-active'
+  },
+  {
+    name: 'In Call (Audio)',
+    view: InCallActiveAudio,
+    tab: 1,
+    slug: 'call-active-audio'
   },
   {
     name: 'Incoming Call',
     view: IncomingCallView,
     tab: 1,
     slug: 'call-incoming'
+  },
+  {
+    name: 'Outgoing Call',
+    view: OutgoingCallView,
+    tab: 1,
+    slug: 'call-outgoing'
   }
 ];
 
@@ -87,7 +107,7 @@ setTimeout(function(){
   })
 }, 100);
 
-},{"./models/strings.js":2,"./models/users.js":3,"./utils/utils.js":5,"./views/CallHistory.jsx":12,"./views/ContactsDocked.jsx":13,"./views/InCallActive.jsx":18,"./views/IncomingCallView.jsx":20,"./views/InvitationManagement.jsx":22,"./views/PrecallNotSignedIn.jsx":27,"./views/PrecallNotSignedInQuick.jsx":28,"./views/PrecallSignedIn.jsx":29,"./views/PrecallSignedInQuick.jsx":30,"./views/TableOfContents.jsx":36}],2:[function(require,module,exports){
+},{"./models/strings.js":2,"./models/users.js":3,"./utils/utils.js":5,"./views/CallHistory.jsx":13,"./views/ContactsDocked.jsx":14,"./views/ContactsView.jsx":15,"./views/InCallActive.jsx":20,"./views/InCallActiveAudio.jsx":21,"./views/IncomingCallView.jsx":23,"./views/InvitationManagement.jsx":25,"./views/OutgoingCallView.jsx":29,"./views/PrecallNotSignedIn.jsx":32,"./views/PrecallNotSignedInQuick.jsx":33,"./views/PrecallSignedIn.jsx":34,"./views/PrecallSignedInQuick.jsx":35,"./views/TableOfContents.jsx":42}],2:[function(require,module,exports){
 module.exports = {
   viewAccount: "View Account",
   signIn: "Sign In",
@@ -101,8 +121,9 @@ module.exports = {
   getLinkText: "Get Link",
   callNamePlaceholder: "Orange Prickly Badger",
   inviteExpireIn: "Invitation will expire in",
-  sampleCallURL: "http://lo.op/nx3nd7h",
+  sampleCallURL: "http://loop.dev.mozaws.net/calls/IRzK5l843AxgKTorMKh7XmhR0QzkSNvuVJVD7ZWpeYjzVWe6BhRPYfd6M5mdTDguvP0QXO0pnd-Ac23-ufDtoKUkvaIUZ8FSo5AHU0FBXqwtO6_ZFSwL1mX3brGHICs6xfCfJ6X0zRVRR-bzM7Bg9glFAIo",
   shareThisLinkWith: "Share this link with",
+  contactManagement: "Add or Import Contacts",
   callHistory: "Call History",
   clearHistory: "Clear",
   invitationList: "Your Invitations",
@@ -115,27 +136,32 @@ module.exports = [
   {
     name: 'Ally Avocado',
     email: 'ally@mail.com',
-    index: 0
+    index: 0,
+    isGoogle: true
   },
   {
     name: 'Bob Banana',
     email: 'bob@gmail.com',
-    index: 1
+    index: 1,
+    isGoogle: false
   },
   {
     name: 'Caitlin Cantaloupe',
     email: 'caitlin.cant@hotmail.com',
-    index: 2
+    index: 2,
+    isGoogle: false
   },
   {
     name: 'Dave Dragonfruit',
     email: 'dd@dragons.net',
-    index: 3
+    index: 3,
+    isGoogle: true
   },
   {
     name: 'Ellie Eggplant',
     email: 'ellie@yahoo.com',
-    index: 4
+    index: 4,
+    isGoogle: true
   }
 ];
 },{}],4:[function(require,module,exports){
@@ -179,6 +205,21 @@ module.exports = {
 
 },{}],6:[function(require,module,exports){
 /** @jsx React.DOM */
+CallControls = require('./CallControls.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+  render: function(){
+    return (
+      React.DOM.div( {className:"AudioCall"}, 
+        CallControls(null),
+        React.DOM.div( {className:"AudioScreen"})
+      )
+    )
+  }
+});
+
+},{"./CallControls.jsx":12}],7:[function(require,module,exports){
+/** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function(){
     return (
@@ -188,7 +229,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   getDefaultProps: function(){
@@ -210,7 +251,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   getDefaultProps: function(){
@@ -233,10 +274,13 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /** @jsx React.DOM */
 SearchBar = require('./SearchBar.jsx');
 Profile = require('./Profile.jsx');
+ProfileDetail = require('./ProfileDetail.jsx');
+Button = require('./Button.jsx');
+Defaults = require('../utils/defaults');
 
 module.exports = React.createClass({displayName: 'exports',
   getInitialState: function(){
@@ -264,7 +308,11 @@ module.exports = React.createClass({displayName: 'exports',
 
     var viewForItem = function(item, index){
       var isSelected = (this.state.selectedIndex === index) ? 'selected' : null;
-      return Profile( {onClick:onClick, key:index, user:item, selected:isSelected} )
+      if(this.props.detail) {
+        return ProfileDetail( {onClick:onClick, key:index, user:item, selected:isSelected} )
+      } else {
+        return Profile( {onClick:onClick, key:index, user:item, selected:isSelected} )
+      }
     }.bind(this);
 
     var shownItems = this.props.items;
@@ -278,16 +326,17 @@ module.exports = React.createClass({displayName: 'exports',
     }
 
     return (
-      React.DOM.div( {className:"List"}, 
-        SearchBar( {ref:"filterSearchBar", val:this.state.filterText, handleChange:this.handleChange} ),
-        React.DOM.ul( {className:"scrollable"}, 
-         shownItems.map(viewForItem)
-        )
+      React.DOM.div( {className:"List " + (this.props.faded ? 'faded': '')}, 
+          SearchBar( {isOpen:this.state.isOpen, onClick:this.togglePanel, ref:"filterSearchBar", val:this.state.filterText, handleChange:this.handleChange} ),
+          React.DOM.ul( {className:"scrollable"}, 
+           shownItems.map(viewForItem)
+          )
       )
     )
   }
 });
-},{"./Profile.jsx":31,"./SearchBar.jsx":32}],10:[function(require,module,exports){
+
+},{"../utils/defaults":4,"./Button.jsx":11,"./Profile.jsx":36,"./ProfileDetail.jsx":37,"./SearchBar.jsx":38}],11:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
@@ -296,21 +345,23 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function(){
     return (
       React.DOM.div( {className:"CallControls"}, 
-       React.DOM.i( {className:"button end"}, STRINGS.endCall),
+       React.DOM.i( {className:"button end fa fa-phone"}),
        React.DOM.i( {className:"button active fa fa-video-camera"}),
        React.DOM.i( {className:"button fa fa-volume-up"}),
+       React.DOM.i( {className:"button fa fa-microphone-slash"}),
        React.DOM.span( {className:"right"}, "2:45")
       )
     )
   }
 });
-},{}],12:[function(require,module,exports){
+
+},{}],13:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 TabBar = require('./TabBar.jsx');
@@ -330,7 +381,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":7,"./HistoryList.jsx":17,"./Panel.jsx":25,"./TabBar.jsx":35}],13:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./HistoryList.jsx":19,"./Panel.jsx":30,"./TabBar.jsx":41}],14:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseStateCorner = require('./BaseStateCorner.jsx');
 BuddyList = require('./BuddyList.jsx');
@@ -347,16 +398,162 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseStateCorner.jsx":8,"./BuddyList.jsx":9,"./Window.jsx":38}],14:[function(require,module,exports){
+},{"./BaseStateCorner.jsx":9,"./BuddyList.jsx":10,"./Window.jsx":44}],15:[function(require,module,exports){
+/** @jsx React.DOM */
+BaseState = require('./BaseState.jsx');
+TabBar = require('./TabBar.jsx');
+Panel = require('./Panel.jsx');
+HeaderQuick = require('./HeaderQuick.jsx');
+Footer = require('./Footer.jsx');
+NewCallView = require('./NewCallView.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+  mixins: [React.addons.LinkedStateMixin],
+  getInitialState: function(){
+    return {
+      isVisible: false
+    }
+  },
+  openView: function(){
+    $(this.refs.newContactView.getDOMNode()).css({display: 'flex'});
+  },
+  closeView: function(){
+    $(this.refs.newContactView.getDOMNode()).hide();
+  },
+  toggleView: function(){
+    this.setState({
+      isVisible: !this.state.isVisible
+    });
+    if(this.state.isVisible) {
+      this.closeView();
+    } else {
+      this.openView();
+    }
+  },
+  componentDidMount: function(){
+    this.closeView();
+  },
+  addContact: function(){
+    this.toggleView();
+    this.setState({
+      name: '',
+      email: ''
+    });
+    if(!this.state.name || !this.state.email ) return;
+    var contact = {
+      name: this.state.name,
+      email: this.state.email
+    };
+
+    this.props.items.push(contact);
+  },
+  render: function() {
+    return (
+      BaseState( {name: this.props.name,  index: this.props.index }, 
+        TabBar( {selected:this.props.tab} ),
+        Panel( {extraClass:"Contacts", items: this.props.items }, 
+
+          React.DOM.div( {className:"ContactManagement"}, 
+            React.DOM.div( {className:"Header"}, 
+              React.DOM.div(null, STRINGS.contactManagement)
+            ),
+
+            React.DOM.div( {className:"ContactManagementView"}, 
+              
+              React.DOM.div( {className:"ButtonGroup"}, 
+                Button( {text:"Import Contacts", style:"default"}),
+                Button( {text:"New Contact", onClick:this.toggleView, style:this.state.isVisible ? 'default-active' : 'default'})
+              ),
+
+              React.DOM.div( {className:"NewContactView", ref:"newContactView"}, 
+                React.DOM.hr(null ),
+                React.DOM.input( {valueLink:this.linkState('name'), placeholder:"Name"} ),
+                React.DOM.input( {valueLink:this.linkState('email'), placeholder:"Email"} ),
+                React.DOM.div( {className:"ButtonGroup"}, 
+                  Button( {onClick:this.addContact, text:"Add Contact", style:"action"})
+                )
+              )
+            )
+          ),
+
+          BuddyList( {faded:this.state.isVisible ? true : false, items:this.props.items, detail:"true"}),
+          Footer( {linkText:STRINGS.signOut, username:STRINGS.loggedInUsername})
+        )
+      )
+    );
+  }
+});
+
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./HeaderQuick.jsx":18,"./NewCallView.jsx":26,"./Panel.jsx":30,"./TabBar.jsx":41}],16:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
+  mixins: [React.addons.LinkedStateMixin],
+  getInitialState: function(){
+    return {
+      isDropdownVisible: false,
+      currentIcon: 'fa-circle',
+      name: this.props.username,
+      isEditing: false
+    }
+  },
+  onClick: function(){
+    if(this.state.isDropdownVisible) {
+      $(this.refs.statusDropdown.getDOMNode()).hide();
+    } else {
+      $(this.refs.statusDropdown.getDOMNode()).show();
+    }
+    this.setState({
+      isDropdownVisible: !this.state.isDropdownVisible
+    });
+  },
+  setIcon: function(e) {
+    $(this.refs.statusDropdown.getDOMNode()).hide();
+    this.setState({
+      currentIcon: e.currentTarget.dataset.icon,
+      isDropdownVisible: false
+    });
+  },
+  hideDropdown: function() {
+    $(this.refs.statusDropdown.getDOMNode()).hide();
+    this.setState({
+      isDropdownVisible: false
+    });
+  },
+  toggleInput: function() {
+    this.setState({
+      isEditing: !this.state.isEditing
+    })
+    $(this.refs.inputBox.getDOMNode()).focus();
+  },
+  checkKey: function(e){
+    if(e.keyCode === 13) {
+      this.setState({
+        isEditing: false
+      });
+    }
+  },
   render: function(){
+    var linkStyle = {
+      display: this.state.isEditing ? 'none' : 'block'
+    };
+    var inputStyle = {
+      display: !this.state.isEditing ? 'none' : 'block'
+    };
     return (
-      React.DOM.div( {className:"Footer tip", 'data-tip':"Sign in to Firefox Account (or other)"}, 
+      React.DOM.div( {className:"Footer", onMouseLeave:this.hideDropdown}, 
         React.DOM.div(null, 
-          React.DOM.a(null, 
-            this.props.username
-          )
+          React.DOM.div( {onClick:this.onClick, className:"status-icon"}, 
+            React.DOM.i( {className:"fa " + this.state.currentIcon})
+          ),
+          React.DOM.ul( {ref:"statusDropdown", onMouseLeave:this.hideDropdown, className:"Dropdown"}, 
+            React.DOM.li( {onClick:this.setIcon, 'data-icon':"fa-circle"}, React.DOM.i( {className:"fa fa-circle"}),"Available"),
+            React.DOM.li( {onClick:this.setIcon, 'data-icon':"fa-dot-circle-o"}, React.DOM.i( {className:"fa fa-dot-circle-o"}),"Contacts Only"),
+            React.DOM.li( {onClick:this.setIcon, 'data-icon':"fa-circle-o grey"}, React.DOM.i( {className:"fa fa-circle-o grey"}),"Do Not Disturb")
+          ),
+          React.DOM.a( {style:linkStyle, onClick:this.toggleInput}, 
+            this.state.name
+          ),
+          React.DOM.input( {onKeyPress:this.checkKey, valueLink:this.linkState('name'), ref:"inputBox", style:inputStyle} )
         ),
         React.DOM.div( {className:"action"}, 
           this.props.linkText
@@ -366,7 +563,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 })
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /** @jsx React.DOM */
 Button = require('./Button.jsx');
 
@@ -394,7 +591,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./Button.jsx":10}],16:[function(require,module,exports){
+},{"./Button.jsx":11}],18:[function(require,module,exports){
 /** @jsx React.DOM */
 Button = require('./Button.jsx');
 
@@ -421,20 +618,30 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./Button.jsx":10}],17:[function(require,module,exports){
+},{"./Button.jsx":11}],19:[function(require,module,exports){
 /** @jsx React.DOM */
 SmallProfile = require('./SmallProfile.jsx');
 
 module.exports = React.createClass({displayName: 'exports',
+  getInitialState: function(){
+    return {
+      numItems: 10
+    }
+  },
+  clearList: function(){
+    this.setState({
+      numItems: 0
+    });
+  },
   render: function(){
     return (
       React.DOM.div( {className:"HistoryList"}, 
         React.DOM.div( {className:"Header"}, 
           React.DOM.div(null, STRINGS.callHistory),
-          React.DOM.div( {className:"Button"}, STRINGS.clearHistory)
+          React.DOM.div( {onClick:this.clearList, className:"Button"}, STRINGS.clearHistory)
         ),
         React.DOM.ul( {className:"CallHistory"}, 
-          _.range(10).map(function(i){
+          _.range(this.state.numItems).map(function(i){
             var u = _.random(0, _users.length -1);
             var callType = _.random(0, 1) === 1 ? 'incoming' : 'outgoing';
             var missed = _.random(0, 3) === 1 ? 'missed' : 'accepted';
@@ -464,7 +671,8 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"./SmallProfile.jsx":33}],18:[function(require,module,exports){
+
+},{"./SmallProfile.jsx":39}],20:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseStateCorner = require('./BaseStateCorner.jsx');
 Window = require('./Window.jsx');
@@ -481,7 +689,26 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseStateCorner.jsx":8,"./VideoCall.jsx":37,"./Window.jsx":38}],19:[function(require,module,exports){
+
+},{"./BaseStateCorner.jsx":9,"./VideoCall.jsx":43,"./Window.jsx":44}],21:[function(require,module,exports){
+/** @jsx React.DOM */
+BaseStateCorner = require('./BaseStateCorner.jsx');
+Window = require('./Window.jsx');
+AudioCall = require('./AudioCall.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+  render: function() {
+    return (
+        BaseStateCorner( {name: this.props.name,  index: this.props.index }, 
+          Window( {items: this.props.items,  title:"Aubrey Drake Graham"}, 
+            AudioCall(null )
+          )
+        )
+    );
+  }
+});
+
+},{"./AudioCall.jsx":6,"./BaseStateCorner.jsx":9,"./Window.jsx":44}],22:[function(require,module,exports){
 /** @jsx React.DOM */
 Button = require('./Button.jsx');
 
@@ -492,14 +719,15 @@ module.exports = React.createClass({displayName: 'exports',
         React.DOM.div( {className:"avatar"}),
         React.DOM.h3(null, "Aubrey Drake Graham"),
         React.DOM.div( {className:"ButtonGroup"}, 
-          Button( {text:"Ignore", style:"cancel"}),
+          Button( {text:"Ignore ▾", style:"cancel"}),
           Button( {text:"Answer", style:"action"})
         )
       )
     )
   }
 });
-},{"./Button.jsx":10}],20:[function(require,module,exports){
+
+},{"./Button.jsx":11}],23:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseStateCorner = require('./BaseStateCorner.jsx');
 Window = require('./Window.jsx');
@@ -517,7 +745,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseStateCorner.jsx":8,"./IncomingCall.jsx":19,"./Window.jsx":38}],21:[function(require,module,exports){
+},{"./BaseStateCorner.jsx":9,"./IncomingCall.jsx":22,"./Window.jsx":44}],24:[function(require,module,exports){
 /** @jsx React.DOM */
 var Invitation = React.createClass({displayName: 'Invitation',
   render: function() {
@@ -590,7 +818,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],22:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 TabBar = require('./TabBar.jsx');
@@ -610,7 +838,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":7,"./InvitationList.jsx":21,"./Panel.jsx":25,"./TabBar.jsx":35}],23:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./InvitationList.jsx":24,"./Panel.jsx":30,"./TabBar.jsx":41}],26:[function(require,module,exports){
 /** @jsx React.DOM */
 SpinnerView = require('./SpinnerView.jsx');
 BackButton = require('./BackButton.jsx');
@@ -700,7 +928,7 @@ module.exports= React.createClass({displayName: 'exports',
     }
   }
 });
-},{"./BackButton.jsx":6,"./Button.jsx":10,"./SpinnerView.jsx":34}],24:[function(require,module,exports){
+},{"./BackButton.jsx":7,"./Button.jsx":11,"./SpinnerView.jsx":40}],27:[function(require,module,exports){
 /** @jsx React.DOM */
 SpinnerView = require('./SpinnerView.jsx');
 Button = require('./Button.jsx');
@@ -711,8 +939,9 @@ module.exports= React.createClass({displayName: 'exports',
   getInitialState: function(){
     return {
       callDuration: 15,
-      callName: '',
+      callName: STRINGS.callNamePlaceholder,
       isCustomizing: false,
+      copyText: 'Copy',
       customizeText: 'Customize',
       arrow: '▸'
     }
@@ -736,6 +965,11 @@ module.exports= React.createClass({displayName: 'exports',
       callDuration: 15
     });
   },
+  copied: function(){
+    this.setState({
+      copyText: 'Copied!'
+    });
+  },
   render: function(){
     var linkSection;
       return (
@@ -745,33 +979,71 @@ module.exports= React.createClass({displayName: 'exports',
             React.DOM.input( {value:STRINGS.sampleCallURL}),
             React.DOM.span( {onClick:this.onClick}, React.DOM.i( {className:"fa fa-cog " + this.state.isCustomizing}))
           ),
+          React.DOM.p( {className:"label"}, React.DOM.i( {className:"fa fa-tag"}), " ",  this.state.callName,  " ", React.DOM.small(null, "(What is this?)")),
           React.DOM.div( {className:"Customize", ref:"customizePanel"}, 
             React.DOM.h5(null, "Invitation Name"),
-            React.DOM.input( {ref:"callerNameInput", valueLink:this.linkState('callName'), placeholder:STRINGS.callNamePlaceholder}),
+            React.DOM.input( {ref:"callerNameInput", valueLink:this.linkState('callName')}),
             React.DOM.h5(null, React.DOM.i( {className:"fa fa-clock-o"}), " ", STRINGS.inviteExpireIn, " ",  getTimeFromRange(this.state.callDuration), "."),
             React.DOM.input( {valueLink:this.linkState('callDuration'), type:"range", name:"time", min:"1", max:"100"})
           ),
           React.DOM.div( {className:"ButtonGroup"}, 
             Button( {text:"Share", style:"default"}),
-            Button( {text:"Copy", style:"default"})
+            Button( {text:this.state.copyText, onClick:this.copied, style:"default"})
           )
         )
       )
   }
 });
 
-},{"./Button.jsx":10,"./SpinnerView.jsx":34}],25:[function(require,module,exports){
+},{"./Button.jsx":11,"./SpinnerView.jsx":40}],28:[function(require,module,exports){
+/** @jsx React.DOM */
+Button = require('./Button.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+  render: function(){
+    return (
+      React.DOM.div( {className:"OutgoingCall"}, 
+        React.DOM.div( {className:"avatar"}),
+        React.DOM.h3(null, "Kanye West"),
+        React.DOM.div( {className:"ButtonGroup"}, 
+          Button( {text:"Cancel", style:"default"})
+        )
+      )
+    )
+  }
+});
+
+},{"./Button.jsx":11}],29:[function(require,module,exports){
+/** @jsx React.DOM */
+BaseStateCorner = require('./BaseStateCorner.jsx');
+Window = require('./Window.jsx');
+OutgoingCall= require('./OutgoingCall.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+  render: function() {
+    return (
+        BaseStateCorner( {name: this.props.name,  index: this.props.index }, 
+          Window( {items: this.props.items,  title:"Calling Kanye West...", type:""}, 
+            OutgoingCall(null )
+          )
+        )
+    );
+  }
+});
+
+},{"./BaseStateCorner.jsx":9,"./OutgoingCall.jsx":28,"./Window.jsx":44}],30:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
     return (
-      React.DOM.div( {className:"Panel"}, 
+      React.DOM.div( {className:"Panel " + this.props.extraClass}, 
          this.props.children 
       )
     )
   }
 });
-},{}],26:[function(require,module,exports){
+
+},{}],31:[function(require,module,exports){
 /** @jsx React.DOM */
 
 _animationDefaults = require('../utils/defaults.js').animation;
@@ -831,7 +1103,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 })
-},{"../utils/defaults.js":4}],27:[function(require,module,exports){
+},{"../utils/defaults.js":4}],32:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 PanelGroup = require('./PanelGroup.jsx');
@@ -859,7 +1131,7 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseState.jsx":7,"./Footer.jsx":14,"./Header.jsx":15,"./NewCallView.jsx":23,"./Panel.jsx":25,"./PanelGroup.jsx":26,"./TabBar.jsx":35}],28:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./Header.jsx":17,"./NewCallView.jsx":26,"./Panel.jsx":30,"./PanelGroup.jsx":31,"./TabBar.jsx":41}],33:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 TabBar = require('./TabBar.jsx');
@@ -882,7 +1154,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":7,"./Footer.jsx":14,"./HeaderQuick.jsx":16,"./NewCallViewQuick.jsx":24,"./Panel.jsx":25,"./TabBar.jsx":35}],29:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./HeaderQuick.jsx":18,"./NewCallViewQuick.jsx":27,"./Panel.jsx":30,"./TabBar.jsx":41}],34:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 PanelGroup = require('./PanelGroup.jsx');
@@ -911,7 +1183,7 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseState.jsx":7,"./Footer.jsx":14,"./Header.jsx":15,"./NewCallView.jsx":23,"./Panel.jsx":25,"./PanelGroup.jsx":26,"./TabBar.jsx":35}],30:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./Header.jsx":17,"./NewCallView.jsx":26,"./Panel.jsx":30,"./PanelGroup.jsx":31,"./TabBar.jsx":41}],35:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 TabBar = require('./TabBar.jsx');
@@ -935,12 +1207,18 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":7,"./Footer.jsx":14,"./HeaderQuick.jsx":16,"./NewCallView.jsx":23,"./Panel.jsx":25,"./TabBar.jsx":35}],31:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./HeaderQuick.jsx":18,"./NewCallView.jsx":26,"./Panel.jsx":30,"./TabBar.jsx":41}],36:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   getInitialState: function() {
+    var callType = Math.random() > 0.5 ? 'Video call' : 'Audio call';
+    var callTime = moment().subtract('minutes', Math.random()*6000);
+    var callIcon = callType === 'Video call' ? 'fa-video-camera' : 'fa-phone';
     return {
-      isDropdownVisible: false
+      isDropdownVisible: false,
+      callType: callType,
+      callIcon: callIcon,
+      callTime: callTime
     }
   },
   onClick: function(){
@@ -967,8 +1245,11 @@ module.exports = React.createClass({displayName: 'exports',
       React.DOM.div( {onClick:this.onClick, className:["Profile", this.props.selected].join(' ')} , 
         React.DOM.div( {className:"avatar user-" + this.props.user.index}),
         React.DOM.div( {className:"details"}, 
-          React.DOM.div( {className:"username"},  this.props.user.name ),
-          React.DOM.div( {className:"email"},  this.props.user.email )
+          React.DOM.div( {className:"username"},  this.props.user.name,  " ", React.DOM.i( {className:this.props.user.isGoogle ? 'fa fa-google' : ''})),
+          React.DOM.div( {className:"email"}, 
+            React.DOM.i( {className:"fa " + this.state.callIcon} ),
+             this.state.callTime.calendar()
+          )
         ),
         React.DOM.div( {className:"icons", onClick:this.toggleDropdown}, 
           React.DOM.i( {className:"fa fa-video-camera"}),
@@ -984,20 +1265,72 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 })
-},{}],32:[function(require,module,exports){
+
+},{}],37:[function(require,module,exports){
+/** @jsx React.DOM */
+module.exports = React.createClass({displayName: 'exports',
+  getInitialState: function() {
+    return {
+      isDropdownVisible: false,
+    }
+  },
+  onClick: function(){
+    this.props.onClick(this.props.key);
+  },
+  hideDropdown: function() {
+    $(this.refs.callDropdown.getDOMNode()).hide();
+    this.setState({
+      isDropdownVisible: false
+    });
+  },
+  toggleDropdown: function(){
+    if(this.state.isDropdownVisible) {
+      $(this.refs.callDropdown.getDOMNode()).hide();
+    } else {
+      $(this.refs.callDropdown.getDOMNode()).show();
+    }
+    this.setState({
+      isDropdownVisible: !this.state.isDropdownVisible
+    });
+  },
+  render: function(){
+    return (
+      React.DOM.div( {onClick:this.onClick, className:["Profile", this.props.selected].join(' ')} , 
+        React.DOM.div( {className:"avatar user-" + this.props.user.index}),
+        React.DOM.div( {className:"details"}, 
+          React.DOM.div( {className:"username"},  this.props.user.name,  " ", React.DOM.i( {className:this.props.user.isGoogle ? 'fa fa-google' : ''})),
+          React.DOM.div( {className:"email"}, 
+             this.props.user.email 
+          )
+        ),
+        React.DOM.div( {className:"icons", onClick:this.toggleDropdown}, 
+          React.DOM.i( {className:"fa fa-video-camera"}),
+          React.DOM.i( {className:"fa fa-caret-down"})
+        ),
+        React.DOM.ul( {ref:"callDropdown", onMouseLeave:this.hideDropdown, className:"Dropdown"}, 
+          React.DOM.li(null, React.DOM.i( {className:"fa fa-video-camera"}),"Video Call"),
+          React.DOM.li(null, React.DOM.i( {className:"fa fa-phone"}),"Audio Call"),
+          React.DOM.li(null, React.DOM.i( {className:"fa fa-user"}),"Edit Contact..."),
+          React.DOM.li(null, React.DOM.i( {className:"fa fa-trash-o"}),"Remove Contact")
+        )
+      )
+    )
+  }
+})
+
+},{}],38:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function(){
     return (
       React.DOM.div( {className:"SearchBarWrapper"}, 
-        React.DOM.input( {ref:"searchInput", className:"SearchBar", value:this.props.val, onChange:this.props.handleChange, placeholder:STRINGS.searchPlaceholder}),
-        React.DOM.i( {className:"fa fa-book tip", 'data-tip':"Add, Import Contacts"})
+        React.DOM.input( {ref:"searchInput", className:"SearchBar", value:this.props.val, onChange:this.props.handleChange, placeholder:STRINGS.searchPlaceholder})
       )
     )
   }
 });
 
-},{}],33:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   onClick: function(){
@@ -1016,7 +1349,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 })
 
-},{}],34:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   componentDidMount: function(){
@@ -1035,7 +1368,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],35:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
@@ -1047,15 +1380,15 @@ module.exports = React.createClass({displayName: 'exports',
         React.DOM.li( {className:(this.props.selected === 1) ? 'active tip' : 'tip', 'data-tip':"Call History Tab"}, 
           React.DOM.a( {href:"#callhistory"}, React.DOM.i( {className:"fa fa-clock-o"}))
         ),
-        React.DOM.li( {className:(this.props.selected === 2) ? 'active tip' : 'tip', 'data-tip':"Invitation Revocation/Permissions Tab"}, 
-          React.DOM.a( {href:"#invitationlist"}, React.DOM.i( {className:"fa fa-link"}))
+        React.DOM.li( {className:(this.props.selected === 2) ? 'active tip' : 'tip', 'data-tip':"Contacts"}, 
+          React.DOM.a( {href:"#contacts"}, React.DOM.i( {className:"fa fa-book"}))
         )
       )
     )
   }
 });
 
-},{}],36:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function(){
@@ -1070,7 +1403,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],37:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 /** @jsx React.DOM */
 CallControls = require('./CallControls.jsx');
 
@@ -1088,7 +1421,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./CallControls.jsx":11}],38:[function(require,module,exports){
+},{"./CallControls.jsx":12}],44:[function(require,module,exports){
 /** @jsx React.DOM */
 var WindowTitlebar = React.createClass({displayName: 'WindowTitlebar',
   render: function(){

@@ -2,7 +2,7 @@
 module.exports = React.createClass({
   render: function() {
     return (
-      <div className="Panel">
+      <div className={"Panel " + this.props.extraClass}>
         { this.props.children }
       </div>
     )

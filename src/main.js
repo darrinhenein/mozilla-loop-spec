@@ -12,8 +12,22 @@ PrecallSignedInQuick = require('./views/PrecallSignedInQuick.jsx');
 CallHistory = require('./views/CallHistory.jsx');
 InvitationManagement = require('./views/InvitationManagement.jsx');
 InCallActive = require('./views/InCallActive.jsx');
+InCallActiveAudio = require('./views/InCallActiveAudio.jsx');
 ContactsDocked = require('./views/ContactsDocked.jsx');
+ContactsView = require('./views/ContactsView.jsx');
 IncomingCallView = require('./views/IncomingCallView.jsx');
+OutgoingCallView = require('./views/OutgoingCallView.jsx');
+
+moment.lang('en', {
+  calendar : {
+    lastDay : '[Yesterday at] LT',
+    sameDay : '[Today at] LT',
+    nextDay : '[Tomorrow at] LT',
+    lastWeek : 'l [at] LT',
+    nextWeek : 'l [at] LT',
+    sameElse : 'L'
+  }
+});
 
 var states = [
   {
@@ -29,34 +43,40 @@ var states = [
     slug: 'precall-signedin'
   },
   {
+    name: 'Contacts',
+    view: ContactsView,
+    tab: 2,
+    slug: 'contacts'
+  },
+  {
     name: 'Call History',
     view: CallHistory,
     tab: 1,
     slug: 'callhistory'
   },
   {
-    name: 'Invitation Management',
-    view: InvitationManagement,
-    tab: 2,
-    slug: 'invitationlist'
-  },
-  {
-    name: 'Contacts (Docked)',
-    view: ContactsDocked,
-    tab: 0,
-    slug: 'contacts-docked'
-  },
-  {
-    name: 'In Call (Active)',
+    name: 'In Call (Video)',
     view: InCallActive,
     tab: 1,
     slug: 'call-active'
+  },
+  {
+    name: 'In Call (Audio)',
+    view: InCallActiveAudio,
+    tab: 1,
+    slug: 'call-active-audio'
   },
   {
     name: 'Incoming Call',
     view: IncomingCallView,
     tab: 1,
     slug: 'call-incoming'
+  },
+  {
+    name: 'Outgoing Call',
+    view: OutgoingCallView,
+    tab: 1,
+    slug: 'call-outgoing'
   }
 ];
 

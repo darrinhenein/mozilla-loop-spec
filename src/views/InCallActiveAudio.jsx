@@ -1,14 +1,14 @@
 /** @jsx React.DOM */
 BaseStateCorner = require('./BaseStateCorner.jsx');
 Window = require('./Window.jsx');
-VideoCall = require('./VideoCall.jsx');
+AudioCall = require('./AudioCall.jsx');
 
 module.exports = React.createClass({
   render: function() {
     return (
         <BaseStateCorner name={ this.props.name } index={ this.props.index }>
           <Window items={ this.props.items } title="Aubrey Drake Graham">
-            <VideoCall />
+            <AudioCall />
           </Window>
         </BaseStateCorner>
     );

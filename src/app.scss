@@ -5,8 +5,28 @@ $lightRed: #D74A1B;
 $blue: #4285F4;
 $darkBlue: #669BD7;
 $lightBlue: #5A94F5;
+$highlightBlue: #73DAFB;
+$teal: #6AA974;
 $panelBackground: #F5F5F5;
 $white75: rgba(255, 255, 255, 0.75);
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+hr {
+  width: 100%;
+  flex: 1;
+  border: none;
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+small {
+  font-size: 90%;
+  opacity: 0.8;
+}
 
 body {
   font-family: 'Lucida Grande', sans-serif;
@@ -23,7 +43,6 @@ body {
 }
 
 .component-wrapper {
-  margin-bottom: 100px;
   padding-top: 120px;
 }
 
@@ -49,6 +68,7 @@ header {
   padding: 20px 0 10px;
   background: #FFF;
   z-index: 1200;
+  width: 75%;
   h1 {
     color: #333;
     font-weight: bold;
@@ -91,7 +111,6 @@ header {
   box-shadow: 3px 3px 2px #F5F5F5;
   padding-right: 70px;
   padding-top: 70px;
-  min-height: 200px;
   min-width: 400px;
   display: flex;
   align-items: flex-end;
@@ -236,6 +255,12 @@ h5 {
   flex-direction: column;
   background: $panelBackground;
   transition: opacity 0.3s ease-in-out;
+  &.Contacts {
+    background: $panelBackground;
+    .List {
+      background: $panelBackground;
+    }
+  }
 }
 
 .WindowWrapper {
@@ -247,7 +272,7 @@ h5 {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
   overflow: hidden;
-  width: 350px;
+  min-width: 300px;
 }
 
 .Window {
@@ -272,11 +297,29 @@ h5 {
       background-size: 75%;
       width: 25%;
       height: 100%;
-      transition: opacity 0.3s ease-in-out;
+      transition: opacity 0.2s ease-in-out;
       &:hover {
         opacity: 1;
       }
     }
+  }
+}
+
+.AudioCall {
+  position: relative;
+  display: flex;
+  height: 26px;
+  .CallControls {
+    background: #111;
+    border: none;
+    .button.active {
+      color: #FFF;
+      background: $green;
+    }
+  }
+  .AudioScreen {
+    display: flex;
+    padding: 10px;
   }
 }
 
@@ -306,7 +349,7 @@ h5 {
 .CallControls {
   position: absolute;
   top: 0;
-  height: 22px;
+  // height: 22px;
   width: 100%;
   z-index: 1000;
   background: rgba(0,0,0,0.4);
@@ -321,7 +364,7 @@ h5 {
   }
   .button {
     color: #DDD;
-    padding: 5px 10px;
+    padding: 7px 10px;
     font-size: 12px;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
@@ -367,7 +410,7 @@ h5 {
 }
 
 .Footer {
-  padding: 10px;
+  padding: 5px 10px;
   font-size: 12px;
   border-top: 1px solid #D1D1D1;
   background: #EAEAEA;
@@ -377,9 +420,40 @@ h5 {
   justify-content: flex-end;
   margin-top: auto;
   flex-direction: row;
+  a {
+    color: #222;
+    &:hover {
+      color: $lightBlue;
+    }
+  }
+  .Dropdown {
+    left: 15px;
+    top: -9%;
+    right: auto;
+    li i {
+      color: $lightGreen;
+      &.grey {
+        color: #888;
+      }
+    }
+  }
   div {
     flex: 3;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     padding: 5px 0px;
+    position: relative;
+    .status-icon {
+      flex: 0 0 18px;
+      cursor: pointer;
+      i {
+        color: $lightGreen;
+        &.grey {
+          color: #888;
+        }
+      }
+    }
     a {
       font-weight: bold;
       text-decoration: none;
@@ -388,12 +462,20 @@ h5 {
   div.action {
     border-left: 1px solid #CCC;
     padding-left: 10px;
-    text-align: center;
+    justify-content: center;
     flex: 1;
   }
   &:hover {
-    cursor: pointer;
-    background: #D9D9D9;
+    .status-icon i.fa {
+      text-shadow: 0 0 5px $highlightBlue;
+    }
+  }
+  input {
+    margin: 0;
+    border: none;
+    flex: 0 0 75%;
+    height: 100%;
+    padding: 4px 10px;
   }
 }
 
@@ -406,11 +488,31 @@ h5 {
   float: right;
 }
 
-.List {
+.ContactManagement {
   display: flex;
   flex-direction: column;
+  .ContactManagementView {
+    background: $panelBackground;
+    flex-direction: column;
+    display: flex;
+    padding: 10px;
+    .NewContactView {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.List {
+  display: flex;
+  // overflow: hidden;
+  flex-direction: column;
+  transition: opacity 0.3s ease-in-out;
+  &.faded {
+    opacity: 0.3;
+  }
   .scrollable {
-    max-height: 250px;
+    max-height: 300px;
     overflow: scroll;
   }
 }
@@ -419,21 +521,22 @@ h5 {
   display: flex;
   cursor: pointer;
   justify-content: center;
-  padding: 10px;
+  padding: 15px 5px;
   margin: 15px 0 0 0;
   color: #FFF;
   background: #AAA;
   font-weight: bold;
   height: 8px;
   font-size: 12px;
-  line-height: 9px;
+  line-height: 0px;
   border-radius: 3px;
+  white-space: nowrap;
 }
 
 .ButtonGroup {
   display: flex;
   flex-direction: row;
-  margin-bottom: 10px;
+  width: 100%;
   .Button {
     flex: 1;
     margin: 0 5px;
@@ -468,6 +571,11 @@ h5 {
     &:hover {
       background: $lightBlue;
     }
+  }
+  &.default-active {
+    background: #FFF;
+    color: $blue;
+    box-shadow: 0 0 0 1px $blue;
   }
 }
 
@@ -616,33 +724,7 @@ input {
   }
   &:hover .icons {
     visibility: visible;
-  }
-  .Dropdown {
-    position: absolute;
-    right: 10px;
-    top: 40%;
-    background: #FDFDFD;
-    padding: 5px;
     z-index: 1000;
-    border-radius: 3px;
-    display: none;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    li {
-      margin: 3px 0px;
-      padding: 4px 6px;
-      border: 1px solid transparent;
-      border-radius: 3px;
-      cursor: pointer;
-      &:hover {
-        border: 1px solid #CCC;
-        background: #EEE;
-      }
-      .fa {
-        width: 18px;
-        margin-right: 8px;
-        color: #777;
-      }
-    }
   }
   .avatar {
     width: 40px;
@@ -677,12 +759,66 @@ input {
     }
   }
   .username {
-    font-size: 14px;
+    font-size: 12px;
     line-height: 20px;
+    color: #222;
+    font-weight: bold;
+    i.fa {
+      position: absolute;
+      right: 10px;
+      top: 35%;
+      width: 14px;
+      height: 14px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 50%;
+      line-height: 16px;
+      color: #FFF;
+      text-align: center;
+      font-size: 10px;
+    }
   }
   .email {
-    opacity: 0.6;
+    color: #999;
     font-size: 11px;
+    line-height: 16px;
+    i.fa {
+      padding-right: 5px;
+      color: $lightBlue;
+      opacity: 0.85;
+    }
+  }
+  .datetime {
+    opacity: 0.4;
+    line-height: 16px;
+    font-size: 9px;
+  }
+}
+
+.Dropdown {
+  position: absolute;
+  right: 10px;
+  top: 40%;
+  background: #FDFDFD;
+  padding: 5px;
+  z-index: 1000;
+  border-radius: 3px;
+  display: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  li {
+    margin: 3px 0px;
+    padding: 4px 6px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    &:hover {
+      border: 1px solid #CCC;
+      background: #EEE;
+    }
+    .fa {
+      width: 18px;
+      margin-right: 8px;
+      color: #777;
+    }
   }
 }
 
@@ -694,10 +830,15 @@ input {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  width: 89%;
 }
 
 .NewCallView.Quick {
+  .label {
+    color: #999;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 5px 0;
+  }
   .inputControls {
     display: flex;
     align-items: center;
@@ -714,7 +855,7 @@ input {
     }
   }
   .ButtonGroup {
-    margin: 10px 0;
+    margin: 10px 0 0;
   }
   h5 {
     margin: 5px 0;
@@ -762,7 +903,7 @@ input {
   }
 }
 
-.HistoryList .Header, .InvitationList .Header {
+.Header {
   padding: 5px 10px;
   color: #888;
   margin: 0;
@@ -771,12 +912,12 @@ input {
   display: flex;
   align-items: center;
   flex-direction: row;
-  height: 18px;
+  height: 24px;
   .Button {
     margin: 0;
-    padding: 5px 10px;
-    font-weight: normal;
-    background: transparent;
+      padding: 9px 10px;
+      font-weight: normal;
+      background: transparent;
     border: 1px solid #CCC;
     color: #AAA;
     margin-left: auto;
@@ -948,12 +1089,26 @@ input {
   }
 }
 
+.OutgoingCall {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  .avatar {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    background: url('images/kanye.png') no-repeat;
+    background-size: cover;
+    margin-bottom: 15px;
+  }
+}
 /*
 Tipr 1.0.1
 Copyright (c) 2013 Tipue
 Tipr is released under the MIT License
 http://www.tipue.com/tipr
-*/
+ */
 
 .tipr_content {
   font: 10px / 1.7 "Helvetica Neue", Helvetica, Arial, sans-serif;
