@@ -48,7 +48,7 @@ module.exports = React.createClass({
         <ul ref="callDropdown" onMouseLeave={this.hideDropdown} className="Dropdown">
           <li><i className="fa fa-video-camera"></i>Video Call</li>
           <li><i className="fa fa-phone"></i>Audio Call</li>
-          <li><i className="fa fa-user"></i>Edit Contact...</li>
+          <li onClick={this.props.onClickEdit}><i className="fa fa-user"></i>Edit Contact...</li>
           <li><i className="fa fa-trash-o"></i>Remove Contact</li>
         </ul>
       </div>

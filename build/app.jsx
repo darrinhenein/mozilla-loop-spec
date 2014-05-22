@@ -8,6 +8,7 @@ TableOfContents = require('./views/TableOfContents.jsx');
 
 PrecallNotSignedIn = require('./views/PrecallNotSignedIn.jsx');
 PrecallNotSignedInQuick = require('./views/PrecallNotSignedInQuick.jsx');
+PrecallNotSignedInFirstRun = require('./views/PrecallNotSignedInFirstRun.jsx');
 PrecallSignedIn = require('./views/PrecallSignedIn.jsx');
 PrecallSignedInQuick = require('./views/PrecallSignedInQuick.jsx');
 CallHistory = require('./views/CallHistory.jsx');
@@ -31,6 +32,12 @@ moment.lang('en', {
 });
 
 var states = [
+  {
+    name: 'Precall (First Run)',
+    view: PrecallNotSignedInFirstRun,
+    tab: 0,
+    slug: 'precall-firstrun'
+  },
   {
     name: 'Precall (Not Signed In)',
     view: PrecallNotSignedInQuick,
@@ -107,7 +114,7 @@ setTimeout(function(){
   })
 }, 100);
 
-},{"./models/strings.js":2,"./models/users.js":3,"./utils/utils.js":5,"./views/CallHistory.jsx":13,"./views/ContactsDocked.jsx":14,"./views/ContactsView.jsx":15,"./views/InCallActive.jsx":20,"./views/InCallActiveAudio.jsx":21,"./views/IncomingCallView.jsx":23,"./views/InvitationManagement.jsx":25,"./views/OutgoingCallView.jsx":29,"./views/PrecallNotSignedIn.jsx":32,"./views/PrecallNotSignedInQuick.jsx":33,"./views/PrecallSignedIn.jsx":34,"./views/PrecallSignedInQuick.jsx":35,"./views/TableOfContents.jsx":42}],2:[function(require,module,exports){
+},{"./models/strings.js":2,"./models/users.js":3,"./utils/utils.js":5,"./views/CallHistory.jsx":13,"./views/ContactsDocked.jsx":14,"./views/ContactsView.jsx":15,"./views/InCallActive.jsx":20,"./views/InCallActiveAudio.jsx":21,"./views/IncomingCallView.jsx":23,"./views/InvitationManagement.jsx":25,"./views/OutgoingCallView.jsx":29,"./views/PrecallNotSignedIn.jsx":32,"./views/PrecallNotSignedInFirstRun.jsx":33,"./views/PrecallNotSignedInQuick.jsx":34,"./views/PrecallSignedIn.jsx":35,"./views/PrecallSignedInQuick.jsx":36,"./views/TableOfContents.jsx":43}],2:[function(require,module,exports){
 module.exports = {
   viewAccount: "View Account",
   signIn: "Sign In",
@@ -286,7 +293,8 @@ module.exports = React.createClass({displayName: 'exports',
   getInitialState: function(){
     return {
       filterText: '',
-      selectedIndex: -1
+      selectedIndex: -1,
+      isOpen: false
     }
   },
   handleChange: function(){
@@ -297,21 +305,42 @@ module.exports = React.createClass({displayName: 'exports',
       }
     );
   },
+  openPanel: function(){
+    $(this.refs.listSlider.getDOMNode()).velocity({
+      translateX: '-50%'
+    }, Defaults.animation);
+  },
+  closePanel: function(){
+    $(this.refs.listSlider.getDOMNode()).velocity({
+      translateX: '0'
+    }, Defaults.animation);
+  },
+  togglePanel: function(e){
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+
+    if(!this.state.isOpen) {
+      this.openPanel();
+    } else {
+      this.closePanel();
+    }
+  },
   render: function(){
     var onClick = function(idx){
-    this.setState(
-      {
-        selectedIndex: idx
-      }
-    );
+      this.setState(
+        {
+          selectedIndex: idx
+        }
+      );
     }.bind(this);
 
     var viewForItem = function(item, index){
       var isSelected = (this.state.selectedIndex === index) ? 'selected' : null;
       if(this.props.detail) {
-        return ProfileDetail( {onClick:onClick, key:index, user:item, selected:isSelected} )
+        return ProfileDetail( {onClickEdit:this.togglePanel, onClick:onClick, key:index, user:item, selected:isSelected} )
       } else {
-        return Profile( {onClick:onClick, key:index, user:item, selected:isSelected} )
+        return Profile( {onClickEdit:this.togglePanel, onClick:onClick, key:index, user:item, selected:isSelected} )
       }
     }.bind(this);
 
@@ -325,18 +354,32 @@ module.exports = React.createClass({displayName: 'exports',
       });
     }
 
+    var contact = this.props.items[this.state.selectedIndex] || { name: '', email: ''};
+
     return (
-      React.DOM.div( {className:"List " + (this.props.faded ? 'faded': '')}, 
-          SearchBar( {isOpen:this.state.isOpen, onClick:this.togglePanel, ref:"filterSearchBar", val:this.state.filterText, handleChange:this.handleChange} ),
-          React.DOM.ul( {className:"scrollable"}, 
-           shownItems.map(viewForItem)
+      React.DOM.div( {ref:"listSlider", className:"ListPanels"}, 
+        React.DOM.div( {className:"List " + (this.props.faded ? 'faded': '')}, 
+            SearchBar( {isOpen:this.state.isOpen, onClick:this.togglePanel, ref:"filterSearchBar", val:this.state.filterText, handleChange:this.handleChange} ),
+            React.DOM.ul( {className:"scrollable"}, 
+             shownItems.map(viewForItem)
+            )
+        ),
+        React.DOM.div( {className:"EditContact"}, 
+          React.DOM.div( {className:"Header"}, "Edit Contact"),
+          React.DOM.div( {className:"Form"}, 
+            React.DOM.label(null, "Name"),
+            React.DOM.input( {defaultValue:contact.name} ),
+            React.DOM.label(null, "Email"),
+            React.DOM.input( {defaultValue:contact.email} ),
+            Button( {text:"Done", onClick:this.togglePanel, style:"action"})
           )
+        )
       )
     )
   }
 });
 
-},{"../utils/defaults":4,"./Button.jsx":11,"./Profile.jsx":36,"./ProfileDetail.jsx":37,"./SearchBar.jsx":38}],11:[function(require,module,exports){
+},{"../utils/defaults":4,"./Button.jsx":11,"./Profile.jsx":37,"./ProfileDetail.jsx":38,"./SearchBar.jsx":39}],11:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
@@ -381,7 +424,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":8,"./HistoryList.jsx":19,"./Panel.jsx":30,"./TabBar.jsx":41}],14:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./HistoryList.jsx":19,"./Panel.jsx":30,"./TabBar.jsx":42}],14:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseStateCorner = require('./BaseStateCorner.jsx');
 BuddyList = require('./BuddyList.jsx');
@@ -398,7 +441,7 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseStateCorner.jsx":9,"./BuddyList.jsx":10,"./Window.jsx":44}],15:[function(require,module,exports){
+},{"./BaseStateCorner.jsx":9,"./BuddyList.jsx":10,"./Window.jsx":45}],15:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 TabBar = require('./TabBar.jsx');
@@ -484,7 +527,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":8,"./Footer.jsx":16,"./HeaderQuick.jsx":18,"./NewCallView.jsx":26,"./Panel.jsx":30,"./TabBar.jsx":41}],16:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./HeaderQuick.jsx":18,"./NewCallView.jsx":26,"./Panel.jsx":30,"./TabBar.jsx":42}],16:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   mixins: [React.addons.LinkedStateMixin],
@@ -672,7 +715,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./SmallProfile.jsx":39}],20:[function(require,module,exports){
+},{"./SmallProfile.jsx":40}],20:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseStateCorner = require('./BaseStateCorner.jsx');
 Window = require('./Window.jsx');
@@ -682,7 +725,7 @@ module.exports = React.createClass({displayName: 'exports',
   render: function() {
     return (
         BaseStateCorner( {name: this.props.name,  index: this.props.index }, 
-          Window( {items: this.props.items,  title:"Aubrey Drake Graham"}, 
+          Window( {extraClass:"InCall", items: this.props.items,  title:"Aubrey Drake Graham"}, 
             VideoCall(null )
           )
         )
@@ -690,7 +733,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseStateCorner.jsx":9,"./VideoCall.jsx":43,"./Window.jsx":44}],21:[function(require,module,exports){
+},{"./BaseStateCorner.jsx":9,"./VideoCall.jsx":44,"./Window.jsx":45}],21:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseStateCorner = require('./BaseStateCorner.jsx');
 Window = require('./Window.jsx');
@@ -700,7 +743,7 @@ module.exports = React.createClass({displayName: 'exports',
   render: function() {
     return (
         BaseStateCorner( {name: this.props.name,  index: this.props.index }, 
-          Window( {items: this.props.items,  title:"Aubrey Drake Graham"}, 
+          Window( {extraClass:"InCall", items: this.props.items,  title:"Aubrey Drake Graham"}, 
             AudioCall(null )
           )
         )
@@ -708,7 +751,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./AudioCall.jsx":6,"./BaseStateCorner.jsx":9,"./Window.jsx":44}],22:[function(require,module,exports){
+},{"./AudioCall.jsx":6,"./BaseStateCorner.jsx":9,"./Window.jsx":45}],22:[function(require,module,exports){
 /** @jsx React.DOM */
 Button = require('./Button.jsx');
 
@@ -718,6 +761,10 @@ module.exports = React.createClass({displayName: 'exports',
       React.DOM.div( {className:"IncomingCall"}, 
         React.DOM.div( {className:"avatar"}),
         React.DOM.h3(null, "Aubrey Drake Graham"),
+        React.DOM.div( {className:"callTypeIcons"}, 
+          React.DOM.i( {className:"fa fa-microphone active"}),
+          React.DOM.i( {className:"fa fa-video-camera"})
+        ),
         React.DOM.div( {className:"ButtonGroup"}, 
           Button( {text:"Ignore ▾", style:"cancel"}),
           Button( {text:"Answer", style:"action"})
@@ -745,7 +792,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseStateCorner.jsx":9,"./IncomingCall.jsx":22,"./Window.jsx":44}],24:[function(require,module,exports){
+},{"./BaseStateCorner.jsx":9,"./IncomingCall.jsx":22,"./Window.jsx":45}],24:[function(require,module,exports){
 /** @jsx React.DOM */
 var Invitation = React.createClass({displayName: 'Invitation',
   render: function() {
@@ -838,7 +885,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":8,"./InvitationList.jsx":24,"./Panel.jsx":30,"./TabBar.jsx":41}],26:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./InvitationList.jsx":24,"./Panel.jsx":30,"./TabBar.jsx":42}],26:[function(require,module,exports){
 /** @jsx React.DOM */
 SpinnerView = require('./SpinnerView.jsx');
 BackButton = require('./BackButton.jsx');
@@ -928,7 +975,7 @@ module.exports= React.createClass({displayName: 'exports',
     }
   }
 });
-},{"./BackButton.jsx":7,"./Button.jsx":11,"./SpinnerView.jsx":40}],27:[function(require,module,exports){
+},{"./BackButton.jsx":7,"./Button.jsx":11,"./SpinnerView.jsx":41}],27:[function(require,module,exports){
 /** @jsx React.DOM */
 SpinnerView = require('./SpinnerView.jsx');
 Button = require('./Button.jsx');
@@ -995,21 +1042,72 @@ module.exports= React.createClass({displayName: 'exports',
   }
 });
 
-},{"./Button.jsx":11,"./SpinnerView.jsx":40}],28:[function(require,module,exports){
+},{"./Button.jsx":11,"./SpinnerView.jsx":41}],28:[function(require,module,exports){
 /** @jsx React.DOM */
 Button = require('./Button.jsx');
 
 module.exports = React.createClass({displayName: 'exports',
+  getInitialState: function(){
+    return {
+      isConnecting: true,
+      states: [
+        'connecting',
+        'ringing',
+        'failed'
+      ],
+      currentState: 0
+    }
+  },
+  componentDidMount: function(){
+    setInterval(function(){
+      var s = this.state.currentState;
+      s += 1;
+      if (s > this.state.states.length-1) s = 0;
+      this.setState({
+        currentState: s
+      })
+    }.bind(this), 4000);
+  },
   render: function(){
-    return (
-      React.DOM.div( {className:"OutgoingCall"}, 
-        React.DOM.div( {className:"avatar"}),
-        React.DOM.h3(null, "Kanye West"),
-        React.DOM.div( {className:"ButtonGroup"}, 
-          Button( {text:"Cancel", style:"default"})
+    var s = this.state.states[this.state.currentState];
+    if(s == 'connecting'){
+      return (
+        React.DOM.div( {className:"OutgoingCall"}, 
+          React.DOM.div( {className:"avatar"}),
+          React.DOM.h3(null, "Kanye West"),
+          React.DOM.div( {className:"loading"}),
+          React.DOM.h6(null, "Connecting..."),
+          React.DOM.div( {className:"ButtonGroup"}, 
+            Button( {text:"Cancel", style:"default"})
+          )
         )
       )
-    )
+    } else if(s == 'ringing') {
+      return (
+        React.DOM.div( {className:"OutgoingCall"}, 
+          React.DOM.div( {className:"avatar"}),
+          React.DOM.h3(null, "Kanye West"),
+          React.DOM.div( {className:"loading"}),
+          React.DOM.h6(null, "Ringing..."),
+          React.DOM.div( {className:"ButtonGroup"}, 
+            Button( {text:"Cancel", style:"default"})
+          )
+        )
+      )
+    } else if(s == 'failed') {
+      return (
+        React.DOM.div( {className:"OutgoingCall"}, 
+          React.DOM.div( {className:"avatar"}),
+          React.DOM.h3(null, "Kanye West"),
+          React.DOM.div( {className:"loading failed"}),
+          React.DOM.h6(null, "Call Failed"),
+          React.DOM.div( {className:"ButtonGroup"}, 
+            Button( {text:"Cancel", style:"default"}),
+            Button( {text:"Retry", style:"action"})
+          )
+        )
+      )
+    }
   }
 });
 
@@ -1023,7 +1121,7 @@ module.exports = React.createClass({displayName: 'exports',
   render: function() {
     return (
         BaseStateCorner( {name: this.props.name,  index: this.props.index }, 
-          Window( {items: this.props.items,  title:"Calling Kanye West...", type:""}, 
+          Window( {items: this.props.items,  title:"Kanye West", type:""}, 
             OutgoingCall(null )
           )
         )
@@ -1031,7 +1129,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseStateCorner.jsx":9,"./OutgoingCall.jsx":28,"./Window.jsx":44}],30:[function(require,module,exports){
+},{"./BaseStateCorner.jsx":9,"./OutgoingCall.jsx":28,"./Window.jsx":45}],30:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
@@ -1131,7 +1229,34 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseState.jsx":8,"./Footer.jsx":16,"./Header.jsx":17,"./NewCallView.jsx":26,"./Panel.jsx":30,"./PanelGroup.jsx":31,"./TabBar.jsx":41}],33:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./Header.jsx":17,"./NewCallView.jsx":26,"./Panel.jsx":30,"./PanelGroup.jsx":31,"./TabBar.jsx":42}],33:[function(require,module,exports){
+/** @jsx React.DOM */
+BaseState = require('./BaseState.jsx');
+TabBar = require('./TabBar.jsx');
+Panel = require('./Panel.jsx');
+HeaderQuick = require('./HeaderQuick.jsx');
+NewCallViewQuick = require('./NewCallViewQuick.jsx');
+Footer = require('./Footer.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+  render: function() {
+    return (
+        BaseState( {name: this.props.name,  index: this.props.index }, 
+          TabBar( {selected:this.props.tab} ),
+            Panel( {extraClass:"LegalPanel", items: this.props.items }, 
+              React.DOM.div( {className:"Legal"}, 
+                React.DOM.p(null, "By proceeding, you accept the ", React.DOM.a( {href:"https://accounts.firefox.com/en-us/legal/terms"}, "Terms and Services"), " and ", React.DOM.a( {href:"https://accounts.firefox.com/en-us/legal/privacy"}, "Privacy Notice"),"."),
+                Button( {text:"OK", style:"default"} )
+              ),
+              NewCallViewQuick(null),
+              Footer( {linkText:STRINGS.signIn, username:STRINGS.loggedOutUsername})
+            )
+        )
+    );
+  }
+});
+
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./HeaderQuick.jsx":18,"./NewCallViewQuick.jsx":27,"./Panel.jsx":30,"./TabBar.jsx":42}],34:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 TabBar = require('./TabBar.jsx');
@@ -1154,7 +1279,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":8,"./Footer.jsx":16,"./HeaderQuick.jsx":18,"./NewCallViewQuick.jsx":27,"./Panel.jsx":30,"./TabBar.jsx":41}],34:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./HeaderQuick.jsx":18,"./NewCallViewQuick.jsx":27,"./Panel.jsx":30,"./TabBar.jsx":42}],35:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 PanelGroup = require('./PanelGroup.jsx');
@@ -1183,7 +1308,7 @@ module.exports = React.createClass({displayName: 'exports',
     );
   }
 });
-},{"./BaseState.jsx":8,"./Footer.jsx":16,"./Header.jsx":17,"./NewCallView.jsx":26,"./Panel.jsx":30,"./PanelGroup.jsx":31,"./TabBar.jsx":41}],35:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./Header.jsx":17,"./NewCallView.jsx":26,"./Panel.jsx":30,"./PanelGroup.jsx":31,"./TabBar.jsx":42}],36:[function(require,module,exports){
 /** @jsx React.DOM */
 BaseState = require('./BaseState.jsx');
 TabBar = require('./TabBar.jsx');
@@ -1197,7 +1322,7 @@ module.exports = React.createClass({displayName: 'exports',
     return (
         BaseState( {name: this.props.name,  index: this.props.index }, 
           TabBar( {selected:this.props.tab} ),
-          Panel( {items: this.props.items }, 
+          Panel( {extraClass:"Contacts", items: this.props.items }, 
             NewCallViewQuick(null),
             BuddyList( {items:this.props.items} ),
             Footer( {linkText:STRINGS.signOut, username:STRINGS.loggedInUsername})
@@ -1207,7 +1332,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./BaseState.jsx":8,"./Footer.jsx":16,"./HeaderQuick.jsx":18,"./NewCallView.jsx":26,"./Panel.jsx":30,"./TabBar.jsx":41}],36:[function(require,module,exports){
+},{"./BaseState.jsx":8,"./Footer.jsx":16,"./HeaderQuick.jsx":18,"./NewCallView.jsx":26,"./Panel.jsx":30,"./TabBar.jsx":42}],37:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   getInitialState: function() {
@@ -1258,7 +1383,7 @@ module.exports = React.createClass({displayName: 'exports',
         React.DOM.ul( {ref:"callDropdown", onMouseLeave:this.hideDropdown, className:"Dropdown"}, 
           React.DOM.li(null, React.DOM.i( {className:"fa fa-video-camera"}),"Video Call"),
           React.DOM.li(null, React.DOM.i( {className:"fa fa-phone"}),"Audio Call"),
-          React.DOM.li(null, React.DOM.i( {className:"fa fa-user"}),"Edit Contact..."),
+          React.DOM.li( {onClick:this.props.onClickEdit}, React.DOM.i( {className:"fa fa-user"}),"Edit Contact..."),
           React.DOM.li(null, React.DOM.i( {className:"fa fa-trash-o"}),"Remove Contact")
         )
       )
@@ -1266,7 +1391,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 })
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   getInitialState: function() {
@@ -1310,7 +1435,7 @@ module.exports = React.createClass({displayName: 'exports',
         React.DOM.ul( {ref:"callDropdown", onMouseLeave:this.hideDropdown, className:"Dropdown"}, 
           React.DOM.li(null, React.DOM.i( {className:"fa fa-video-camera"}),"Video Call"),
           React.DOM.li(null, React.DOM.i( {className:"fa fa-phone"}),"Audio Call"),
-          React.DOM.li(null, React.DOM.i( {className:"fa fa-user"}),"Edit Contact..."),
+          React.DOM.li( {onClick:this.props.onClickEdit}, React.DOM.i( {className:"fa fa-user"}),"Edit Contact..."),
           React.DOM.li(null, React.DOM.i( {className:"fa fa-trash-o"}),"Remove Contact")
         )
       )
@@ -1318,7 +1443,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 })
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function(){
@@ -1330,7 +1455,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   onClick: function(){
@@ -1349,7 +1474,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 })
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   componentDidMount: function(){
@@ -1368,7 +1493,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
@@ -1388,7 +1513,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 /** @jsx React.DOM */
 module.exports = React.createClass({displayName: 'exports',
   render: function(){
@@ -1403,7 +1528,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 /** @jsx React.DOM */
 CallControls = require('./CallControls.jsx');
 
@@ -1421,7 +1546,7 @@ module.exports = React.createClass({displayName: 'exports',
   }
 });
 
-},{"./CallControls.jsx":12}],44:[function(require,module,exports){
+},{"./CallControls.jsx":12}],45:[function(require,module,exports){
 /** @jsx React.DOM */
 var WindowTitlebar = React.createClass({displayName: 'WindowTitlebar',
   render: function(){
@@ -1438,7 +1563,7 @@ var WindowTitlebar = React.createClass({displayName: 'WindowTitlebar',
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
     return (
-      React.DOM.div( {className:"Window"}, 
+      React.DOM.div( {className:"Window " + this.props.extraClass}, 
         WindowTitlebar( {title:this.props.title, type:this.props.type}),
         React.DOM.div( {className:"WindowBody"}, 
            this.props.children 

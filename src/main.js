@@ -7,6 +7,7 @@ TableOfContents = require('./views/TableOfContents.jsx');
 
 PrecallNotSignedIn = require('./views/PrecallNotSignedIn.jsx');
 PrecallNotSignedInQuick = require('./views/PrecallNotSignedInQuick.jsx');
+PrecallNotSignedInFirstRun = require('./views/PrecallNotSignedInFirstRun.jsx');
 PrecallSignedIn = require('./views/PrecallSignedIn.jsx');
 PrecallSignedInQuick = require('./views/PrecallSignedInQuick.jsx');
 CallHistory = require('./views/CallHistory.jsx');
@@ -30,6 +31,12 @@ moment.lang('en', {
 });
 
 var states = [
+  {
+    name: 'Precall (First Run)',
+    view: PrecallNotSignedInFirstRun,
+    tab: 0,
+    slug: 'precall-firstrun'
+  },
   {
     name: 'Precall (Not Signed In)',
     view: PrecallNotSignedInQuick,

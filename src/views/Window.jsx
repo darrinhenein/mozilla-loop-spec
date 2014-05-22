@@ -14,7 +14,7 @@ var WindowTitlebar = React.createClass({
 module.exports = React.createClass({
   render: function() {
     return (
-      <div className="Window">
+      <div className={"Window " + this.props.extraClass}>
         <WindowTitlebar title={this.props.title} type={this.props.type}/>
         <div className="WindowBody">
           { this.props.children }

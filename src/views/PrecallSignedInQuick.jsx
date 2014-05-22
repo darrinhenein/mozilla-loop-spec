@@ -11,7 +11,7 @@ module.exports = React.createClass({
     return (
         <BaseState name={ this.props.name } index={ this.props.index }>
           <TabBar selected={this.props.tab} />
-          <Panel items={ this.props.items }>
+          <Panel extraClass="Contacts" items={ this.props.items }>
             <NewCallViewQuick/>
             <BuddyList items={this.props.items} />
             <Footer linkText={STRINGS.signOut} username={STRINGS.loggedInUsername}/>

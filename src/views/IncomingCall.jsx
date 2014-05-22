@@ -7,6 +7,10 @@ module.exports = React.createClass({
       <div className="IncomingCall">
         <div className="avatar"></div>
         <h3>Aubrey Drake Graham</h3>
+        <div className="callTypeIcons">
+          <i className="fa fa-microphone active"></i>
+          <i className="fa fa-video-camera"></i>
+        </div>
         <div className="ButtonGroup">
           <Button text="Ignore ▾" style="cancel"/>
           <Button text="Answer" style="action"/>
