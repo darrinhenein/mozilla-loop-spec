@@ -1,4 +1,6 @@
 /** @jsx React.DOM */
+Marked = require('marked');
+
 _users = require('./models/users.js');
 STRINGS = require('./models/strings.js')
 Utils = require('./utils/utils.js');
@@ -17,6 +19,7 @@ InCallActiveAudio = require('./views/InCallActiveAudio.jsx');
 ContactsDocked = require('./views/ContactsDocked.jsx');
 ContactsView = require('./views/ContactsView.jsx');
 IncomingCallView = require('./views/IncomingCallView.jsx');
+IncomingCallUnknownView = require('./views/IncomingCallUnknownView.jsx');
 OutgoingCallView = require('./views/OutgoingCallView.jsx');
 
 moment.lang('en', {
@@ -80,6 +83,12 @@ var states = [
     slug: 'call-incoming'
   },
   {
+    name: 'Incoming Call (Link)',
+    view: IncomingCallUnknownView,
+    tab: 1,
+    slug: 'call-incoming-unknown'
+  },
+  {
     name: 'Outgoing Call',
     view: OutgoingCallView,
     tab: 1,
@@ -99,16 +108,22 @@ setTimeout(function(){
       $('#wrapper').append(el);
 
       var View = state.view
+      $.get('./notes/' + state.slug + '.md').success(function(data){
+        React.renderComponent(<View items={_users} index={index} tab={state.tab} name={state.name} />, el);
+        var notes = Marked(data);
+        $(el).append($('<div/>', {
+          class: 'Notes'
+        }).html(notes));
+      })
 
-      React.renderComponent(<View items={_users} index={index} tab={state.tab} name={state.name} />, el);
-      $('.tip').tipr({
-        mode: 'top',
-        speed: 200
-      });
-
-      $('.TableOfContents').ddscrollSpy({
-        scrollduration: 0
-      });
 
   })
+  $('.tip').tipr({
+    mode: 'top',
+    speed: 200
+  });
+
+  $('.TableOfContents').ddscrollSpy({
+    scrollduration: 0
+  });
 }, 100);

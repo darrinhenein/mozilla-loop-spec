@@ -27,6 +27,7 @@ body {
 
 .LegalPanel .Quick {
   opacity: 0.3;
+  transition: none;
   pointer-events: none; }
   .LegalPanel .Quick .Button {
     background: #AAA; }
@@ -49,10 +50,56 @@ body {
 
 #outer {
   width: 90%;
-  position: relative; }
+  padding-bottom: 200px; }
 
 .component-wrapper {
-  padding-top: 120px; }
+  padding-top: 120px;
+  padding-bottom: 60px;
+  display: flex; }
+  .component-wrapper .Notes {
+    color: #444;
+    font-size: 70%;
+    position: relative;
+    margin-left: auto;
+    top: 10px;
+    width: 33%;
+    height: 85%;
+    border: 1px solid #DDD;
+    border-radius: 3px;
+    background: whitesmoke;
+    padding: 20px; }
+    .component-wrapper .Notes:before {
+      content: 'NOTES';
+      padding-bottom: 10px;
+      font-size: 10px;
+      color: #CCC;
+      position: absolute;
+      top: 3px;
+      right: 3px; }
+    .component-wrapper .Notes p {
+      line-height: 130%;
+      margin-bottom: 10px; }
+    .component-wrapper .Notes em {
+      font-style: italic; }
+    .component-wrapper .Notes strong {
+      font-weight: bold; }
+    .component-wrapper .Notes h1, .component-wrapper .Notes h2, .component-wrapper .Notes h3, .component-wrapper .Notes h4, .component-wrapper .Notes h5, .component-wrapper .Notes h6 {
+      font-weight: bold;
+      margin-bottom: 8px;
+      margin-top: 18px; }
+    .component-wrapper .Notes h4 {
+      color: #888;
+      text-transform: uppercase;
+      font-size: 90%;
+      border-top: 1px solid #CCC;
+      padding-top: 8px; }
+    .component-wrapper .Notes ul {
+      list-style-type: circle; }
+    .component-wrapper .Notes ol {
+      list-style-type: decimal; }
+    .component-wrapper .Notes ul, .component-wrapper .Notes ol {
+      color: #666;
+      line-height: 16px; }
 
 .TableOfContents a {
   text-decoration: none;
@@ -97,12 +144,6 @@ header {
   width: 100%;
   height: 70px;
   position: relative; }
-
-#wrapper {
-  padding-bottom: 400px;
-  width: 90%;
-  display: flex;
-  flex-direction: column; }
 
 .Browser {
   border-right: 1px solid #DDD;
@@ -908,6 +949,9 @@ input {
   padding: 20px; }
   .IncomingCall .callTypeIcons {
     margin: 2px 0 30px; }
+  .IncomingCall h3 i {
+    padding: 0 5px;
+    color: #999; }
   .IncomingCall i {
     color: #DDD;
     padding: 0 12px; }
@@ -920,6 +964,9 @@ input {
     background: url("images/drake.png") no-repeat;
     background-size: cover;
     margin-bottom: 15px; }
+    .IncomingCall .avatar.unknown {
+      background: url("images/avatar.png") no-repeat;
+      background-size: cover; }
 
 @keyframes rotate {
   from {

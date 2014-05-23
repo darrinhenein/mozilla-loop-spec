@@ -46,6 +46,7 @@ body {
 .LegalPanel {
   .Quick {
     opacity: 0.3;
+    transition: none;
     pointer-events: none;
     .Button {
       background: #AAA;
@@ -74,11 +75,69 @@ body {
 
 #outer {
   width: 90%;
-  position: relative;
+  padding-bottom: 200px;
 }
 
 .component-wrapper {
   padding-top: 120px;
+  padding-bottom: 60px;
+  display: flex;
+  .Notes {
+    &:before {
+      content: 'NOTES';
+      padding-bottom: 10px;
+      font-size: 10px;
+      color: #CCC;
+      position: absolute;
+      top: 3px;
+      right: 3px;
+    }
+    p {
+      line-height: 130%;
+      margin-bottom: 10px;
+    }
+    color: #444;
+    font-size: 70%;
+    position: relative;
+    margin-left: auto;
+    top: 10px;
+    width: 33%;
+    height: 85%;
+    border: 1px solid #DDD;
+    border-radius: 3px;
+    background: $panelBackground;
+    padding: 20px;
+    em {
+      font-style: italic;
+    }
+    strong {
+      font-weight: bold;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: bold;
+      margin-bottom: 8px;
+      margin-top: 18px;
+    }
+
+    h4 {
+      color: #888;
+      text-transform: uppercase;
+      font-size: 90%;
+      border-top: 1px solid #CCC;
+      padding-top: 8px;
+    }
+
+    ul {
+      list-style-type: circle;
+    }
+    ol {
+      list-style-type: decimal;
+    }
+    ul, ol {
+      color: #666;
+      line-height: 16px;
+    }
+  }
 }
 
 .TableOfContents {
@@ -137,13 +196,6 @@ header {
   width: 100%;
   height: 70px;
   position: relative;
-}
-
-#wrapper {
-  padding-bottom: 400px;
-  width: 90%;
-  display: flex;
-  flex-direction: column;
 }
 
 .Browser {
@@ -1160,6 +1212,10 @@ input {
   .callTypeIcons {
     margin: 2px 0 30px;
   }
+  h3 i {
+    padding: 0 5px;
+    color: #999;
+  }
   i {
     color: #DDD;
     padding: 0 12px;
@@ -1174,6 +1230,10 @@ input {
     background: url('images/drake.png') no-repeat;
     background-size: cover;
     margin-bottom: 15px;
+    &.unknown {
+      background: url('images/avatar.png') no-repeat;
+      background-size: cover;
+    }
   }
 }
 

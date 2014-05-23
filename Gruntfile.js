@@ -51,6 +51,9 @@ module.exports = function (grunt) {
           },
           images: {
             src: 'images/*', dest: 'build/', cwd: 'src/', expand: true
+          },
+          files: {
+            src: 'notes/*.md', dest: 'build/', cwd: 'src/', expand: true
           }
         },
 
@@ -120,6 +123,10 @@ module.exports = function (grunt) {
           },
           html: {
             files: 'src/*.html',
+            tasks: ['build'],
+          },
+          files: {
+            files: 'src/notes/*.md',
             tasks: ['build'],
           }
         },

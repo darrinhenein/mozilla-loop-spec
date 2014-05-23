@@ -25,5 +25,8 @@
     "grunt-browserify": "^2.0.8",
     "reactify": "^0.13.1",
     "grunt-contrib-clean": "^0.5.0"
+  },
+  "dependencies": {
+    "marked": "^0.3.2"
   }
 }
