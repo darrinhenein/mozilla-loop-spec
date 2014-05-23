@@ -10,7 +10,8 @@ module.exports = React.createClass({
     return {
       filterText: '',
       selectedIndex: -1,
-      isOpen: false
+      isOpen: false,
+      items: this.props.items
     }
   },
   handleChange: function(){
@@ -42,6 +43,20 @@ module.exports = React.createClass({
       this.closePanel();
     }
   },
+  updateName: function(e){
+    var items = this.state.items;
+    items[this.state.selectedIndex].name = e.target.value;
+    this.setState({
+      items: items
+    })
+  },
+  updateEmail: function(e){
+    var items = this.state.items;
+    items[this.state.selectedIndex].email = e.target.value;
+    this.setState({
+      items: items
+    })
+  },
   render: function(){
     var onClick = function(idx){
       this.setState(
@@ -60,17 +75,17 @@ module.exports = React.createClass({
       }
     }.bind(this);
 
-    var shownItems = this.props.items;
+    var shownItems = this.state.items;
 
     if(this.state.filterText !== '')
     {
       var filter = this.state.filterText.toUpperCase();
-      shownItems = _.filter(this.props.items, function(i){
+      shownItems = _.filter(this.state.items, function(i){
         return (i.name.toUpperCase().indexOf(filter) !== -1)
       });
     }
 
-    var contact = this.props.items[this.state.selectedIndex] || { name: '', email: ''};
+    var contact = this.state.items[this.state.selectedIndex] || { name: '', email: ''};
 
     return (
       <div ref="listSlider" className="ListPanels">
@@ -84,9 +99,9 @@ module.exports = React.createClass({
           <div className="Header">Edit Contact</div>
           <div className="Form">
             <label>Name</label>
-            <input defaultValue={contact.name} />
+            <input value={contact.name} onChange={this.updateName} type="text"/>
             <label>Email</label>
-            <input defaultValue={contact.email} />
+            <input value={contact.email} onChange={this.updateEmail} type="text"/>
             <Button text="Done" onClick={this.togglePanel} style="action"/>
           </div>
         </div>

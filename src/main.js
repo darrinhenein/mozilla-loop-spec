@@ -116,14 +116,9 @@ setTimeout(function(){
         }).html(notes));
       })
 
-
   })
   $('.tip').tipr({
     mode: 'top',
     speed: 200
-  });
-
-  $('.TableOfContents').ddscrollSpy({
-    scrollduration: 0
   });
 }, 100);

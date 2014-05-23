@@ -61,7 +61,7 @@ body {
     font-size: 70%;
     position: relative;
     margin-left: auto;
-    top: 10px;
+    top: 15px;
     width: 33%;
     height: 85%;
     border: 1px solid #DDD;
@@ -988,10 +988,12 @@ input {
     background: url("images/loading.png") no-repeat;
     background-size: 24px;
     margin: 5px;
+    -webkit-animation: rotate 1s infinite;
     animation: rotate 1s infinite; }
     .OutgoingCall .loading.failed {
       background: url("images/failed.png") no-repeat;
       background-size: 24px;
+      -webkit-animation: none;
       animation: none; }
   .OutgoingCall h3 {
     margin-bottom: 5px; }

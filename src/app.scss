@@ -100,7 +100,7 @@ body {
     font-size: 70%;
     position: relative;
     margin-left: auto;
-    top: 10px;
+    top: 15px;
     width: 33%;
     height: 85%;
     border: 1px solid #DDD;
@@ -1256,10 +1256,12 @@ input {
     &.failed {
       background: url('images/failed.png') no-repeat;
       background-size: 24px;
+      -webkit-animation: none;
       animation: none;
     }
     background-size: 24px;
     margin: 5px;
+    -webkit-animation: rotate 1s infinite;
     animation: rotate 1s infinite;
   }
   h3 {
