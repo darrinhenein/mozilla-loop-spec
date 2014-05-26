@@ -55,7 +55,7 @@ module.exports = React.createClass({
     return (
       <div className="Footer" onMouseLeave={this.hideDropdown}>
         <div>
-          <div onClick={this.onClick} className="status-icon">
+          <div id="availability-indicator" onClick={this.onClick} className="status-icon">
             <i className={"fa " + this.state.currentIcon}></i>
           </div>
           <ul ref="statusDropdown" onMouseLeave={this.hideDropdown} className="Dropdown">

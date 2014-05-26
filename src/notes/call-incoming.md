@@ -1,4 +1,4 @@
-Microphone and Video Camera icons indicate the type of incoming call (audio or video/audio).
+Microphone and Video Camera [icons](#incoming-call-icons) indicate the type of incoming call (audio or video/audio).
 
 #Actions
 

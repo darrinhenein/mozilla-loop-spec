@@ -7,7 +7,7 @@ module.exports = React.createClass({
       <div className="IncomingCall">
         <div className="avatar"></div>
         <h3>Aubrey Drake Graham</h3>
-        <div className="callTypeIcons">
+        <div id="incoming-call-icons" className="callTypeIcons">
           <i className="fa fa-microphone active"></i>
           <i className="fa fa-video-camera"></i>
         </div>

@@ -6,7 +6,7 @@ module.exports = React.createClass({
     return (
       <div className="IncomingCall">
         <div className="avatar unknown"></div>
-        <h3><i className="fa fa-tag"></i>Orange Prickly Badger</h3>
+        <h3><i className="fa fa-tag"></i>{ STRINGS.callNamePlaceholder }</h3>
         <div className="callTypeIcons">
           <i className="fa fa-microphone active"></i>
           <i className="fa fa-video-camera active"></i>

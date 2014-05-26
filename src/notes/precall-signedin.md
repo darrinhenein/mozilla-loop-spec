@@ -1,2 +1,2 @@
 ####Try
-1. Changing your **availability** with the green **availability indicator**
+1. Changing your **availability** with the green [**availability indicator**](#availability-indicator)

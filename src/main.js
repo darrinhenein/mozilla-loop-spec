@@ -6,6 +6,7 @@ STRINGS = require('./models/strings.js')
 Utils = require('./utils/utils.js');
 getTimeFromRange = Utils.getTimeFromRange;
 TableOfContents = require('./views/TableOfContents.jsx');
+NoteView = require('./views/NoteView.jsx');
 
 PrecallNotSignedIn = require('./views/PrecallNotSignedIn.jsx');
 PrecallNotSignedInQuick = require('./views/PrecallNotSignedInQuick.jsx');
@@ -105,18 +106,26 @@ setTimeout(function(){
         id: state.slug
       })[0];
 
+      var viewEl = $('<div/>', {
+        class: 'View'
+      })[0];
+
+      var noteEl = $('<div/>', {
+        class: 'NoteWrapper'
+      })[0];
+
+      $(el).append(viewEl).append(noteEl);
+
       $('#wrapper').append(el);
 
       var View = state.view
       $.get('./notes/' + state.slug + '.md').success(function(data){
-        React.renderComponent(<View items={_users} index={index} tab={state.tab} name={state.name} />, el);
+        React.renderComponent(<View items={_users} index={index} tab={state.tab} name={state.name} />, viewEl);
         var notes = Marked(data);
-        $(el).append($('<div/>', {
-          class: 'Notes'
-        }).html(notes));
+        React.renderComponent(<NoteView note={notes} />, noteEl);
       })
-
   })
+
   $('.tip').tipr({
     mode: 'top',
     speed: 200

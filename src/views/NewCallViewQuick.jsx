@@ -48,7 +48,7 @@ module.exports= React.createClass({
             <input value={STRINGS.sampleCallURL}></input>
             <span onClick={this.onClick}><i className={"fa fa-cog " + this.state.isCustomizing}></i></span>
           </div>
-          <p className="label"><i className="fa fa-tag"></i> { this.state.callName } <small>(What is this?)</small></p>
+          <p className="label"><span id="precall-label"><i className="fa fa-tag"></i></span> { this.state.callName } <small>(What is this?)</small></p>
           <div className="Customize" ref="customizePanel">
             <h5>Invitation Name</h5>
             <input ref="callerNameInput" valueLink={this.linkState('callName')}></input>
