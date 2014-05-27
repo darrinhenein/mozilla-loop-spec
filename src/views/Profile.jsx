@@ -3,7 +3,7 @@ module.exports = React.createClass({
   getInitialState: function() {
     var callType = Math.random() > 0.5 ? 'Video call' : 'Audio call';
     var callTime = moment().subtract('minutes', Math.random()*6000);
-    var callIcon = callType === 'Video call' ? 'fa-video-camera' : 'fa-phone';
+    var callIcon = callType === 'Video call' ? 'fa-video-camera' : 'fa-microphone';
     return {
       isDropdownVisible: false,
       callType: callType,

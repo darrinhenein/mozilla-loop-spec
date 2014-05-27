@@ -84,7 +84,7 @@ var states = [
     slug: 'call-incoming'
   },
   {
-    name: 'Incoming Call (Link)',
+    name: 'Incoming Call (Link, Unlabelled)',
     view: IncomingCallUnknownView,
     tab: 1,
     slug: 'call-incoming-unknown'

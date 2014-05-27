@@ -10,7 +10,7 @@ module.exports = React.createClass({
   render: function() {
     return (
         <BaseState name={ this.props.name } index={ this.props.index }>
-          <TabBar selected={this.props.tab} />
+          <TabBar selected={this.props.tab} disabled="2" />
             <Panel extraClass="LegalPanel" items={ this.props.items }>
               <div className="Legal">
                 <p>By proceeding, you accept the <a href="https://accounts.firefox.com/en-us/legal/terms">Terms and Services</a> and <a href="https://accounts.firefox.com/en-us/legal/privacy">Privacy Notice</a>.</p>

@@ -1,3 +1,5 @@
+Utils = require('../utils/utils.js');
+
 module.exports = {
   viewAccount: "View Account",
   signIn: "Sign In",
@@ -11,7 +13,7 @@ module.exports = {
   getLinkText: "Get Link",
   callNamePlaceholder: "Orange Prickly Badger",
   inviteExpireIn: "Invitation will expire in",
-  sampleCallURL: "http://loop.dev.mozaws.net/calls/IRzK5l843AxgKTorMKh7XmhR0QzkSNvuVJVD7ZWpeYjzVWe6BhRPYfd6M5mdTDguvP0QXO0pnd-Ac23-ufDtoKUkvaIUZ8FSo5AHU0FBXqwtO6_ZFSwL1mX3brGHICs6xfCfJ6X0zRVRR-bzM7Bg9glFAIo",
+  sampleCallURL: "http://lo.op/" + Utils.getRandomString(8),
   shareThisLinkWith: "Share this link with",
   contactManagement: "Add or Import Contacts",
   callHistory: "Call History",

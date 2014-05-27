@@ -39,13 +39,14 @@ body {
   height: 100px;
   background: rgba(51, 152, 194, 0.29);
   border: 3px solid rgba(227, 242, 248, 0.85);
-  border-radius: 50%; }
+  border-radius: 50%;
+  z-index: 2500; }
 
-.LegalPanel .Quick {
+.LegalPanel .Quick, .LegalPanel .Footer {
   opacity: 0.3;
   transition: none;
   pointer-events: none; }
-  .LegalPanel .Quick .Button {
+  .LegalPanel .Quick .Button, .LegalPanel .Footer .Button {
     background: #AAA; }
 
 .Legal {
@@ -295,8 +296,7 @@ h5 {
   background: whitesmoke;
   transition: opacity 0.3s ease-in-out; }
   .Panel.Contacts, .Window.Contacts {
-    background: whitesmoke;
-    overflow: hidden; }
+    background: whitesmoke; }
     .Panel.Contacts .List, .Window.Contacts .List {
       background: whitesmoke; }
 
@@ -489,6 +489,9 @@ h5 {
     .ContactManagement .ContactManagementView .NewContactView {
       display: flex;
       flex-direction: column; }
+
+.ListWrapper {
+  overflow: hidden; }
 
 .ListPanels {
   display: flex;
@@ -873,10 +876,14 @@ input {
     margin-left: auto; }
   .CallHistory li.accepted .fa {
     color: #40ca19; }
+    .CallHistory li.accepted .fa.fa-link {
+      color: #4285f4; }
   .CallHistory li.missed .username, .CallHistory li.missed .email, .CallHistory li.missed .CallDetails {
     color: #c14218; }
   .CallHistory li.missed .fa {
     color: #c14218; }
+  .CallHistory li.missed.fa-link {
+    color: #4285f4; }
   .CallHistory li:hover {
     background: #EEE; }
 
@@ -970,6 +977,11 @@ input {
   .IncomingCall h3 i {
     padding: 0 5px;
     color: #999; }
+  .IncomingCall h6 {
+    font-size: 60%;
+    padding-bottom: 10px;
+    font-weight: normal;
+    color: #BBB; }
   .IncomingCall i {
     color: #DDD;
     padding: 0 12px; }

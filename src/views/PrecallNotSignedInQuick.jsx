@@ -10,7 +10,7 @@ module.exports = React.createClass({
   render: function() {
     return (
         <BaseState name={ this.props.name } index={ this.props.index }>
-          <TabBar selected={this.props.tab} />
+          <TabBar selected={this.props.tab} disabled="2" />
             <Panel items={ this.props.items }>
               <NewCallViewQuick/>
               <Footer linkText={STRINGS.signIn} username={STRINGS.loggedOutUsername}/>

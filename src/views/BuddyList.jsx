@@ -23,11 +23,17 @@ module.exports = React.createClass({
     );
   },
   openPanel: function(){
+    if(this.props.delegate.hasOwnProperty('panelOpened')) {
+      this.props.delegate.panelOpened();
+    }
     $(this.refs.listSlider.getDOMNode()).velocity({
       translateX: '-50%'
     }, Defaults.animation);
   },
   closePanel: function(){
+    if(this.props.delegate.hasOwnProperty('panelClosed')) {
+      this.props.delegate.panelClosed();
+    }
     $(this.refs.listSlider.getDOMNode()).velocity({
       translateX: '0'
     }, Defaults.animation);
@@ -88,21 +94,23 @@ module.exports = React.createClass({
     var contact = this.state.items[this.state.selectedIndex] || { name: '', email: ''};
 
     return (
-      <div ref="listSlider" className="ListPanels">
-        <div className={"List " + (this.props.faded ? 'faded': '')}>
-            <SearchBar isOpen={this.state.isOpen} onClick={this.togglePanel} ref="filterSearchBar" val={this.state.filterText} handleChange={this.handleChange} />
-            <ul className="scrollable">
-             {shownItems.map(viewForItem)}
-            </ul>
-        </div>
-        <div className="EditContact">
-          <div className="Header">Edit Contact</div>
-          <div className="Form">
-            <label>Name</label>
-            <input value={contact.name} onChange={this.updateName} type="text"/>
-            <label>Email</label>
-            <input value={contact.email} onChange={this.updateEmail} type="text"/>
-            <Button text="Done" onClick={this.togglePanel} style="action"/>
+      <div className="ListWrapper">
+        <div ref="listSlider" className="ListPanels">
+          <div className={"List " + (this.props.faded ? 'faded': '')}>
+              <SearchBar isOpen={this.state.isOpen} onClick={this.togglePanel} ref="filterSearchBar" val={this.state.filterText} handleChange={this.handleChange} />
+              <ul className="scrollable">
+               {shownItems.map(viewForItem)}
+              </ul>
+          </div>
+          <div className="EditContact">
+            <div className="Header">Edit Contact</div>
+            <div className="Form">
+              <label>Name</label>
+              <input value={contact.name} onChange={this.updateName} type="text"/>
+              <label>Email</label>
+              <input value={contact.email} onChange={this.updateEmail} type="text"/>
+              <Button text="Done" onClick={this.togglePanel} style="action"/>
+            </div>
           </div>
         </div>
       </div>

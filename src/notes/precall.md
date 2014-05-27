@@ -1,8 +1,6 @@
 #Call Label
-Note the [_Orange Prickly Badger_ label](#precall-label) beneath the URL (and in the customize panel). This is used when you see this incoming call, as a hint to the user that the incoming call is the one you recently shared (or perhaps one labelled from the past).
-
-The assumption here is that users are wary of answering calls (especially video) with no label or from unknown sources.
+The [**cog icon**](#newcall-cog) allows users to add metadata (such as a call name or expiration date) to their call link. This must happen before sharing the link. The link URLs themselves are immutable.
 
 ####Try
 1. Changing your **availability** with the green [**availability indicator**](#availability-indicator)
-2. Edit the details of your invitation by clicking the **cog icon**
+2. Edit the details of your invitation by clicking the [**cog icon**](#newcall-cog)

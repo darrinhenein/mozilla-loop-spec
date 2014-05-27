@@ -1,5 +1,14 @@
 module.exports = {
 
+  getRandomString: function(length)
+  {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      for( var i=0; i < length; i++ )
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+      return text;
+  },
+
   getTimeFromRange: function(position) {
     var minp = 1;
     var maxp = 100;

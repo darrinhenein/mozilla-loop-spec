@@ -46,19 +46,24 @@ module.exports = React.createClass({
 
     this.props.items.push(contact);
   },
+  panelOpened: function(){
+    $(this.refs.buttons.getDOMNode()).hide();
+  },
+  panelClosed: function(){
+    $(this.refs.buttons.getDOMNode()).show();
+  },
   render: function() {
     return (
       <BaseState name={ this.props.name } index={ this.props.index }>
         <TabBar selected={this.props.tab} />
         <Panel extraClass="Contacts" items={ this.props.items }>
 
-          <div className="ContactManagement">
+          <div ref="buttons" className="ContactManagement">
             <div className="Header">
               <div>{STRINGS.contactManagement}</div>
             </div>
 
             <div className="ContactManagementView">
-              
               <div className="ButtonGroup">
                 <Button text="Import Contacts" style="default"/>
                 <Button text="New Contact" onClick={this.toggleView} style={this.state.isVisible ? 'default-active' : 'default'}/>
@@ -75,7 +80,7 @@ module.exports = React.createClass({
             </div>
           </div>
 
-          <BuddyList faded={this.state.isVisible ? true : false} items={this.props.items} detail="true"/>
+          <BuddyList delegate={this} faded={this.state.isVisible ? true : false} items={this.props.items} detail="true"/>
           <Footer linkText={STRINGS.signOut} username={STRINGS.loggedInUsername}/>
         </Panel>
       </BaseState>

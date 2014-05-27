@@ -1,4 +1,6 @@
 #Call Label
-Because a link was sent to a non-contact, the label _Orange Prickly Badger_ is the only way to identify the incoming call. This label was either auto-generated at link generation time, or customized by the user at link generation time.
+Because a link was sent to a non-contact, the [URL](#incoming-call-url) is the only way to identify the incoming call. If the caller had entered a name (at link-generation time) for the call, this name would show up instead.
 
-Again, the idea is to avoid having blank incoming calls which forces the user to accept/decline with no knowledge of the caller.
+To give the user more information about the incoming call, we also show the [link-generation date](#incoming-call-date) (if available).
+
+Again, Microphone and Video Camera [icons](#incoming-call-icons) indicate the type of incoming call (audio or video/audio).

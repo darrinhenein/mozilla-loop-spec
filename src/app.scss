@@ -59,11 +59,12 @@ body {
   background: rgba(51, 152, 194, 0.29);
   border: 3px solid rgba(227, 242, 248, 0.85);
   border-radius: 50%;
+  z-index: 2500;
 }
 
 
 .LegalPanel {
-  .Quick {
+  .Quick, .Footer {
     opacity: 0.3;
     transition: none;
     pointer-events: none;
@@ -375,7 +376,6 @@ h5 {
   transition: opacity 0.3s ease-in-out;
   &.Contacts {
     background: $panelBackground;
-    overflow: hidden;
     .List {
       background: $panelBackground;
     }
@@ -620,6 +620,9 @@ h5 {
   }
 }
 
+.ListWrapper {
+  overflow: hidden;
+}
 .ListPanels {
   display: flex;
   width: 200%;
@@ -1098,6 +1101,9 @@ input {
     }
     &.accepted .fa {
       color: $green;
+      &.fa-link {
+        color: $blue;
+      }
     }
     &.missed {
       .username, .email, .CallDetails {
@@ -1105,6 +1111,9 @@ input {
       }
       .fa {
          color: $red;
+      }
+      &.fa-link {
+        color: $blue;
       }
     }
     &:hover {
@@ -1238,6 +1247,12 @@ input {
   h3 i {
     padding: 0 5px;
     color: #999;
+  }
+  h6 {
+    font-size: 60%;
+    padding-bottom: 10px;
+    font-weight: normal;
+    color: #BBB;
   }
   i {
     color: #DDD;
