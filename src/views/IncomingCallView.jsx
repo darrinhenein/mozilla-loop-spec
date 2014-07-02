@@ -7,7 +7,7 @@ module.exports = React.createClass({
   render: function() {
     return (
         <BaseStateCorner name={ this.props.name } index={ this.props.index }>
-          <Window items={ this.props.items } title="Call from Aubrey Drake Graham" type="">
+          <Window extraClass="InCall" items={ this.props.items } title="Call from Aubrey Drake Graham" type="">
             <IncomingCall />
           </Window>
         </BaseStateCorner>

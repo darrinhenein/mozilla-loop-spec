@@ -31,11 +31,12 @@ module.exports = React.createClass({
     });
   },
   render: function(){
+    var username = this.props.user.name.split(' ');
     return (
       <div onClick={this.onClick} className={["Profile", this.props.selected].join(' ')} >
         <div className={"avatar user-" + this.props.user.index}></div>
         <div className="details">
-          <div className="username">{ this.props.user.name } <i className={this.props.user.isGoogle ? 'fa fa-google' : ''}></i></div>
+          <div className="username"><strong>{ username[0] }</strong> { username[1] } <i className={this.props.user.isGoogle ? 'fa fa-google' : ''}></i></div>
           <div className="email">
             <i className={"fa " + this.state.callIcon} ></i>
             { this.state.callTime.calendar()}
@@ -49,6 +50,7 @@ module.exports = React.createClass({
           <li><i className="fa fa-video-camera"></i>Video Call</li>
           <li><i className="fa fa-phone"></i>Audio Call</li>
           <li onClick={this.props.onClickEdit}><i className="fa fa-user"></i>Edit Contact...</li>
+          <li><i className="fa fa-ban"></i>Block Contact</li>
           <li><i className="fa fa-trash-o"></i>Remove Contact</li>
         </ul>
       </div>

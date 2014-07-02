@@ -16,12 +16,19 @@ PrecallSignedInQuick = require('./views/PrecallSignedInQuick.jsx');
 CallHistory = require('./views/CallHistory.jsx');
 InvitationManagement = require('./views/InvitationManagement.jsx');
 InCallActive = require('./views/InCallActive.jsx');
+InCallHold = require('./views/InCallHold.jsx');
 InCallActiveAudio = require('./views/InCallActiveAudio.jsx');
 ContactsDocked = require('./views/ContactsDocked.jsx');
 ContactsView = require('./views/ContactsView.jsx');
 IncomingCallView = require('./views/IncomingCallView.jsx');
 IncomingCallUnknownView = require('./views/IncomingCallUnknownView.jsx');
 OutgoingCallView = require('./views/OutgoingCallView.jsx');
+StartCallView = require('./views/StartCallView.jsx');
+StartCallUnavailableView = require('./views/StartCallUnavailableView.jsx');
+StartCallAccountView = require('./views/StartCallAccountView.jsx');
+LinkPromptView = require('./views/LinkPromptView.jsx');
+Settings = require('./views/Settings.jsx');
+FeedbackView = require('./views/FeedbackView.jsx');
 
 moment.lang('en', {
   calendar : {
@@ -54,6 +61,20 @@ var states = [
     slug: 'precall-signedin'
   },
   {
+    name: 'Error Bar',
+    view: PrecallSignedInQuick,
+    tab: 0,
+    slug: 'error',
+    error: 'error'
+  },
+  {
+    name: 'Warning Bar',
+    view: PrecallSignedInQuick,
+    tab: 0,
+    slug: 'warning',
+    error: 'warning'
+  },
+  {
     name: 'Contacts',
     view: ContactsView,
     tab: 2,
@@ -66,10 +87,21 @@ var states = [
     slug: 'callhistory'
   },
   {
+    name: 'Settings',
+    view: Settings,
+    slug: 'settings'
+  },
+  {
     name: 'In Call (Video)',
     view: InCallActive,
     tab: 1,
     slug: 'call-active'
+  },
+  {
+    name: 'In Call (on Hold)',
+    view: InCallHold,
+    tab: 1,
+    slug: 'call-hold'
   },
   {
     name: 'In Call (Audio)',
@@ -94,6 +126,36 @@ var states = [
     view: OutgoingCallView,
     tab: 1,
     slug: 'call-outgoing'
+  },
+  {
+    name: 'Call Failed/Link Prompt',
+    view: LinkPromptView,
+    tab: 1,
+    slug: 'link-prompt'
+  },
+  {
+    name: 'Start Call (link from accountless)',
+    view: StartCallView,
+    tab: 1,
+    slug: 'start-call'
+  },
+  {
+    name: 'Start Call (link from Loop user)',
+    view: StartCallAccountView,
+    tab: 1,
+    slug: 'start-call-account'
+  },
+  {
+    name: 'Link Clicked (URL unavailable)',
+    view: StartCallUnavailableView,
+    tab: 1,
+    slug: 'start-call-unavailable'
+  },
+  {
+    name: 'Feedback Form',
+    view: FeedbackView,
+    tab: 1,
+    slug: 'feedback'
   }
 ];
 
@@ -101,29 +163,32 @@ setTimeout(function(){
   React.renderComponent(<TableOfContents items={states} />, $('#toc')[0]);
   _.each(states, function(state, index){
 
-      var el = $('<div/>', {
-        class: 'component-wrapper',
-        id: state.slug
-      })[0];
+    var el = $('<div/>', {
+      class: 'component-wrapper',
+      id: state.slug
+    })[0];
 
-      var viewEl = $('<div/>', {
-        class: 'View'
-      })[0];
+    var viewEl = $('<div/>', {
+      class: 'View'
+    })[0];
 
-      var noteEl = $('<div/>', {
-        class: 'NoteWrapper'
-      })[0];
+    var noteEl = $('<div/>', {
+      class: 'NoteWrapper'
+    })[0];
 
-      $(el).append(viewEl).append(noteEl);
+    $(el).append(viewEl);
 
-      $('#wrapper').append(el);
+    $('#wrapper').append(el);
 
-      var View = state.view
-      $.get('./notes/' + state.slug + '.md').success(function(data){
-        React.renderComponent(<View items={_users} index={index} tab={state.tab} name={state.name} />, viewEl);
-        var notes = Marked(data);
-        React.renderComponent(<NoteView note={notes} />, noteEl);
-      })
+    var View = state.view
+    $.get('./notes/' + state.slug + '.md').success(function(data){
+      React.renderComponent(<View items={_users} error={state.error} index={index} tab={state.tab} name={state.name} slug={state.slug} />, viewEl);
+      var notes = Marked(data);
+      $(el).append(noteEl)
+      React.renderComponent(<NoteView note={notes} />, noteEl);
+    }).error(function(error){
+      React.renderComponent(<View items={_users} error={state.error} index={index} tab={state.tab} name={state.name} slug={state.slug} />, viewEl);
+    });
   })
 
   $('.tip').tipr({

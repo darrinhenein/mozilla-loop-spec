@@ -14,8 +14,8 @@ module.exports = React.createClass({
           <i className="fa fa-video-camera active"></i>
         </div>
         <div className="ButtonGroup">
-          <Button text="Ignore ▾" style="cancel"/>
-          <Button text="Answer" style="action"/>
+          <Button text="Ignore" hasRightChevron style="cancel"/>
+          <Button text="Answer" icon="fa-microphone" hasRightChevron style="action"/>
         </div>
       </div>
     )

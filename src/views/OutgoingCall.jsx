@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 Button = require('./Button.jsx');
+LinkPrompt = require('./LinkPrompt.jsx');
 
 module.exports = React.createClass({
   getInitialState: function(){
@@ -7,8 +8,7 @@ module.exports = React.createClass({
       isConnecting: true,
       states: [
         'connecting',
-        'ringing',
-        'failed'
+        'ringing'
       ],
       currentState: 0
     }
@@ -30,10 +30,10 @@ module.exports = React.createClass({
         <div className="OutgoingCall">
           <div className="avatar"></div>
           <h3>Kanye West</h3>
-          <div className="loading"></div>
+          <div className="Loading"></div>
           <h6>Connecting...</h6>
           <div className="ButtonGroup">
-            <Button text="Cancel" style="default"/>
+            <Button text="Cancel" style="cancel"/>
           </div>
         </div>
       )
@@ -42,10 +42,10 @@ module.exports = React.createClass({
         <div className="OutgoingCall">
           <div className="avatar"></div>
           <h3>Kanye West</h3>
-          <div className="loading"></div>
+          <div className="Loading"></div>
           <h6>Ringing...</h6>
           <div className="ButtonGroup">
-            <Button text="Cancel" style="default"/>
+            <Button text="Cancel" style="cancel"/>
           </div>
         </div>
       )
@@ -54,11 +54,12 @@ module.exports = React.createClass({
         <div className="OutgoingCall">
           <div className="avatar"></div>
           <h3>Kanye West</h3>
-          <div className="loading failed"></div>
+          <div className="Loading failed"></div>
           <h6>Call Failed</h6>
           <div className="ButtonGroup">
-            <Button text="Cancel" style="default"/>
-            <Button text="Retry" style="action"/>
+            <Button text="Cancel" style="cancel"/>
+            <Button text="Retry" style="emphasis"/>
+            <Button text="Email Link" style="emphasis"/>
           </div>
         </div>
       )

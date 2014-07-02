@@ -3,6 +3,9 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box; }
 
+strong {
+  font-weight: bold; }
+
 hr {
   width: 100%;
   flex: 1;
@@ -17,6 +20,20 @@ label {
   font-size: 10px;
   color: #777;
   margin-top: 10px; }
+
+.link-button {
+  padding: 4px 9px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #006b9d;
+  background: #EEE;
+  border-radius: 2px;
+  margin: 0 10px;
+  text-transform: uppercase;
+  text-decoration: none; }
+  .link-button:hover {
+    color: #FFF;
+    background: #006b9d; }
 
 body {
   font-family: 'Lucida Grande', sans-serif;
@@ -42,35 +59,31 @@ body {
   border-radius: 50%;
   z-index: 2500; }
 
-.LegalPanel .Quick, .LegalPanel .Footer {
-  opacity: 0.3;
-  transition: none;
-  pointer-events: none; }
-  .LegalPanel .Quick .Button, .LegalPanel .Footer .Button {
-    background: #AAA; }
-
 .Legal {
   display: flex;
-  padding: 10px;
-  border-bottom: 1px solid #CCC;
+  padding: 3px 10px 10px 10px;
   background: #FFF;
-  align-items: center; }
+  align-items: center;
+  text-align: center;
+  opacity: 0.5;
+  transition: opacity 0.3s; }
+  .Legal:hover {
+    opacity: 1; }
   .Legal .Button {
     margin: 0;
     width: 100px; }
   .Legal p {
     line-height: 14px;
-    font-size: 10px;
-    font-weight: bold;
+    font-size: 8px;
     color: #555;
-    padding-right: 5px; }
+    padding: 0 30px; }
 
 #outer {
   width: 90%;
   padding-bottom: 200px; }
 
 .component-wrapper {
-  padding-top: 120px;
+  padding-top: 135px;
   padding-bottom: 60px;
   display: flex; }
   .component-wrapper .NoteWrapper {
@@ -83,8 +96,8 @@ body {
     color: #444;
     font-size: 70%;
     border: 1px solid #DDD;
-    border-radius: 3px;
-    background: whitesmoke;
+    border-radius: 2px;
+    background: #fbfbfb;
     padding: 20px; }
     .component-wrapper .Notes a {
       text-decoration: none; }
@@ -127,10 +140,15 @@ body {
   padding: 3px 10px 3px 0;
   color: #AAA;
   transition: all 0.3s ease-in-out; }
+  .TableOfContents a:after {
+    content: '•';
+    padding-left: 10px; }
   .TableOfContents a.selected {
-    color: #4285f4; }
+    color: #0095dd; }
   .TableOfContents a:last-child {
     border: none; }
+    .TableOfContents a:last-child:after {
+      content: none; }
 
 header {
   position: fixed;
@@ -180,10 +198,10 @@ header {
 a {
   /*font-weight: bold;*/
   text-decoration: underline;
-  color: #4285f4;
+  color: #0095dd;
   cursor: pointer; }
   a:hover {
-    color: #669bd7; }
+    color: #006b9d; }
 
 h1, h2, h3 {
   padding-left: 1px;
@@ -229,10 +247,13 @@ h5 {
     font-size: 11px;
     font-weight: bold;
     margin-bottom: 10px; }
-    .StateWrapper h3.higher {
-      top: -20px;
-      left: -50px;
+    .StateWrapper h3.left {
       position: relative;
+      left: -50px; }
+    .StateWrapper h3.higher {
+      position: relative;
+      left: -50px;
+      top: -20px;
       margin-bottom: 30px; }
   .StateWrapper .counter {
     opacity: 0.3; }
@@ -284,8 +305,11 @@ h5 {
 
 .PanelGroupInner {
   display: flex;
-  width: 200%;
-  background: #333; }
+  width: 200%; }
+
+.Inner {
+  flex: 1;
+  padding: 20px 10px; }
 
 .Panel, .Window {
   box-shadow: 1px 0 0 rgba(0, 0, 0, 0.1);
@@ -293,12 +317,12 @@ h5 {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: whitesmoke;
+  background: #fbfbfb;
   transition: opacity 0.3s ease-in-out; }
   .Panel.Contacts, .Window.Contacts {
-    background: whitesmoke; }
+    background: #fbfbfb; }
     .Panel.Contacts .List, .Window.Contacts .List {
-      background: whitesmoke; }
+      background: #fbfbfb; }
 
 .WindowWrapper {
   display: flex;
@@ -308,27 +332,34 @@ h5 {
   border-radius: 4px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-  min-width: 300px; }
+  width: 300px; }
 
-.Window.InCall .WindowTitlebar {
-  background: #111111; }
-.Window .WindowTitlebar {
-  padding: 0 10px;
-  flex-direction: row;
-  display: flex;
-  align-items: center; }
-  .Window .WindowTitlebar.incoming {
-    background: #40ca19; }
-  .Window .WindowTitlebar h5 {
-    color: #888;
-    font-size: 11px; }
-  .Window .WindowTitlebar .WindowControls {
+.Window {
+  border-radius: 4px; }
+  .Window.InCall .WindowTitlebar {
+    background: #222222; }
+  .Window.InCall .WindowBody .avatar {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2); }
+  .Window.InCall .WindowBody h3 {
+    color: #FFF;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2); }
+  .Window .WindowTitlebar {
+    padding: 0 10px;
+    flex-direction: row;
     display: flex;
-    margin-left: auto;
-    background: url("images/window-controls.png") no-repeat center right;
-    background-size: 60%;
-    width: 25%;
-    height: 100%; }
+    align-items: center; }
+    .Window .WindowTitlebar.incoming {
+      background: #74bf43; }
+    .Window .WindowTitlebar h5 {
+      color: #888;
+      font-size: 11px; }
+    .Window .WindowTitlebar .WindowControls {
+      display: flex;
+      margin-left: auto;
+      background: url("images/window-controls.png") no-repeat center right;
+      background-size: 60%;
+      width: 25%;
+      height: 100%; }
 
 .AudioCall {
   position: relative;
@@ -339,7 +370,7 @@ h5 {
     border: none; }
     .AudioCall .CallControls .button.active {
       color: #FFF;
-      background: #4285f4; }
+      background: #0095dd; }
   .AudioCall .AudioScreen {
     display: flex;
     padding: 10px; }
@@ -347,6 +378,21 @@ h5 {
 .VideoCall {
   position: relative;
   display: flex; }
+  .VideoCall.Hold .VideoScreen {
+    background: url("images/drake-hold.png") #333333;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+    .VideoCall.Hold .VideoScreen .floatingText {
+      top: -20px;
+      position: relative;
+      color: #EEE;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      padding: 10px 20px; }
+    .VideoCall.Hold .VideoScreen i {
+      padding-right: 10px; }
   .VideoCall .VideoScreen {
     height: 240px;
     width: 100%;
@@ -385,7 +431,7 @@ h5 {
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer; }
     .CallControls .button.active {
-      color: #4285f4; }
+      color: #0095dd; }
     .CallControls .button.end {
       color: #FFF;
       background: rgba(193, 56, 24, 0.85); }
@@ -417,6 +463,10 @@ h5 {
   flex-direction: column;
   justify-content: space-between; }
 
+#precall .avatar, #precall-firstrun .avatar {
+  background: url("images/avatar-color.png") no-repeat;
+  background-size: cover; }
+
 .Footer {
   padding: 5px 10px;
   font-size: 12px;
@@ -428,31 +478,74 @@ h5 {
   justify-content: flex-end;
   margin-top: auto;
   flex-direction: row; }
-  .Footer a {
-    color: #222; }
-    .Footer a:hover {
-      color: #5a94f5; }
+  .Footer .avatar {
+    background: url("images/drake.png") no-repeat;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    background-size: cover;
+    min-width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+    flex: 32px 32px 32px;
+    position: relative; }
+  .Footer .center {
+    color: #222;
+    width: 100%;
+    display: flex;
+    align-items: center; }
+    .Footer .center .username:hover {
+      color: #008acb; }
+  .Footer .subtle {
+    padding-right: 10px;
+    margin-left: auto;
+    font-size: 11px;
+    color: #999;
+    font-weight: normal; }
   .Footer .Dropdown {
+    position: absolute;
     left: 15px;
-    top: -9%;
+    top: -8px;
     right: auto; }
+    .Footer .Dropdown li {
+      white-space: nowrap; }
     .Footer .Dropdown li i {
-      color: #49db2b; }
-      .Footer .Dropdown li i.grey {
+      color: #6cb23e; }
+      .Footer .Dropdown li i.fa-circle-o {
         color: #888; }
+  .Footer .userDetails {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    line-height: 14px; }
   .Footer div {
-    flex: 3;
+    flex: 15;
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 5px 0px;
     position: relative; }
+    .Footer div .statusWrapper {
+      border: 1px solid transparent;
+      padding: 2px 4px;
+      margin-left: -4px;
+      margin-top: 2px; }
+      .Footer div .statusWrapper:hover {
+        border: 1px solid #DDD;
+        background: #F1F1F1;
+        border-radius: 3px;
+        cursor: pointer; }
+    .Footer div .status-text {
+      font-weight: normal;
+      font-size: 10px;
+      color: #888; }
     .Footer div .status-icon {
+      padding-left: 5px;
       flex: 0 0 18px;
       cursor: pointer; }
       .Footer div .status-icon i {
-        color: #49db2b; }
-        .Footer div .status-icon i.grey {
+        color: #6cb23e;
+        font-size: 9px; }
+        .Footer div .status-icon i.fa-circle-o {
           color: #888; }
     .Footer div a {
       font-weight: bold;
@@ -461,9 +554,18 @@ h5 {
     border-left: 1px solid #CCC;
     padding-left: 10px;
     justify-content: center;
-    flex: 1; }
-  .Footer:hover .status-icon i.fa {
-    text-shadow: 0 0 5px #73dafb; }
+    flex: 1;
+    cursor: pointer; }
+    .Footer div.action i.active {
+      color: #0095dd; }
+    .Footer div.action .Dropdown {
+      right: initial;
+      left: 29px; }
+      .Footer div.action .Dropdown li a {
+        color: #7F7F7F;
+        font-weight: normal; }
+      .Footer div.action .Dropdown li i {
+        color: #333; }
   .Footer input {
     margin: 0;
     border: none;
@@ -482,7 +584,7 @@ h5 {
   display: flex;
   flex-direction: column; }
   .ContactManagement .ContactManagementView {
-    background: whitesmoke;
+    background: #fbfbfb;
     flex-direction: column;
     display: flex;
     padding: 10px; }
@@ -491,7 +593,8 @@ h5 {
       flex-direction: column; }
 
 .ListWrapper {
-  overflow: hidden; }
+  overflow-x: hidden;
+  overflow-y: visible; }
 
 .ListPanels {
   display: flex;
@@ -501,7 +604,7 @@ h5 {
     flex: 0 0 50%; }
 
 .EditContact {
-  background: whitesmoke; }
+  background: #fbfbfb; }
   .EditContact .Form {
     padding: 10px;
     display: flex;
@@ -515,24 +618,38 @@ h5 {
   transition: opacity 0.3s ease-in-out; }
   .List.faded {
     opacity: 0.3; }
-  .List .scrollable {
-    max-height: 300px;
-    overflow: scroll; }
+  .List h3 {
+    margin: 0;
+    border-bottom: none;
+    border-top: 1px solid #CCC; }
 
 .Button {
   display: flex;
+  position: relative;
   cursor: pointer;
   justify-content: center;
-  padding: 15px 5px;
+  align-items: center;
+  padding: 13px 5px;
   margin: 15px 0 0 0;
-  color: #FFF;
-  background: #AAA;
-  font-weight: bold;
+  color: #333333;
+  background: #FBFBFB;
+  border: 1px solid #C1C1C1;
   height: 8px;
   font-size: 12px;
   line-height: 0px;
-  border-radius: 3px;
+  border-radius: 2px;
   white-space: nowrap; }
+  .Button .fa {
+    color: #FFF;
+    padding: 0 10px; }
+  .Button .chevron {
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 5px 8px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    line-height: 15px; }
 
 .ButtonGroup {
   display: flex;
@@ -547,24 +664,37 @@ h5 {
       margin-right: 0; }
 
 .Button.action {
-  background: #40ca19; }
+  background: #74bf43;
+  border: none;
+  color: #FFF; }
   .Button.action:hover {
-    background: #49db2b; }
+    background: #6cb23e; }
   .Button.action.cancel {
-    background: #c14218;
-    border-color: #d74a1b; }
+    border: none;
+    background: #d74345;
+    border-color: #c43c3e; }
 .Button.cancel {
-  background: #c14218; }
+  border: none;
+  background: #d74345;
+  color: #FFF; }
+.Button.emphasis {
+  background: #0095dd;
+  color: #FFF;
+  border: none; }
+  .Button.emphasis:hover {
+    background: #008acb; }
 .Button.action.cancel:hover, .Button.cancel:hover {
-  background: #d74a1b; }
+  background: #c43c3e;
+  color: #FFF; }
 .Button.default {
-  background: #4285f4; }
+  background: #FBFBFB;
+  color: #333;
+  border: 1px solid #C1C1C1; }
   .Button.default:hover {
-    background: #5a94f5; }
+    background: #EBEBEB; }
 .Button.default-active {
-  background: #FFF;
-  color: #4285f4;
-  box-shadow: 0 0 0 1px #4285f4; }
+  background: #CCC;
+  color: #111; }
 
 .SliderButton {
   display: flex;
@@ -585,7 +715,7 @@ h5 {
     padding: 13px 10px 0;
     border-radius: 0px;
     border-bottom-right-radius: 4px;
-    background: #4285f4;
+    background: #0095dd;
     color: #FFF;
     cursor: pointer;
     text-align: center;
@@ -620,15 +750,15 @@ h5 {
 
 input {
   outline: none;
-  border-radius: 4px;
+  border-radius: 2px;
   height: 24px;
   flex: 24px;
   padding: 0 10px;
   border: 1px solid #CCC;
   margin: 5px 0; }
   input.error {
-    border-color: #c14218;
-    box-shadow: 0 0 4px #d74a1b; }
+    border-color: #d74345;
+    box-shadow: 0 0 4px #c43c3e; }
   input[type=range] {
     border: none;
     padding: 0;
@@ -683,10 +813,12 @@ input {
   font-size: 13px;
   border-top: 1px solid #DDD;
   align-items: center; }
+  .Profile.blocked .username {
+    color: #d74345; }
   .Profile:hover {
     background: #EEE; }
   .Profile.selected {
-    background: #D1E8FF; }
+    background: #EBEBEB; }
   .Profile:hover .icons {
     visibility: visible;
     z-index: 1000; }
@@ -719,8 +851,12 @@ input {
     font-size: 12px;
     line-height: 20px;
     color: #222;
-    font-weight: bold; }
-    .Profile .username i.fa {
+    font-weight: normal; }
+    .Profile .username strong {
+      font-weight: bold; }
+    .Profile .username i.fa-minus-circle {
+      padding-left: 3px; }
+    .Profile .username i.fa-google {
       position: absolute;
       right: 10px;
       top: 35%;
@@ -738,7 +874,7 @@ input {
     line-height: 16px; }
     .Profile .email i.fa {
       padding-right: 5px;
-      color: #5a94f5;
+      color: #008acb;
       opacity: 0.85; }
   .Profile .datetime {
     opacity: 0.4;
@@ -752,14 +888,14 @@ input {
   background: #FDFDFD;
   padding: 5px;
   z-index: 1000;
-  border-radius: 3px;
+  border-radius: 2px;
   display: none;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
   .Dropdown li {
     margin: 3px 0px;
     padding: 4px 6px;
     border: 1px solid transparent;
-    border-radius: 3px;
+    border-radius: 2px;
     cursor: pointer; }
     .Dropdown li:hover {
       border: 1px solid #CCC;
@@ -798,7 +934,7 @@ input {
     color: #BBB;
     cursor: pointer; }
     .NewCallView.Quick .inputControls span i.true {
-      color: #4285f4; }
+      color: #0095dd; }
 .NewCallView.Quick .ButtonGroup {
   margin: 10px 0 0; }
 .NewCallView.Quick h5 {
@@ -819,8 +955,8 @@ input {
   padding: 10px;
   border-bottom: 1px solid #CCC;
   background: #FAFAFA;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px; }
+  border-top-right-radius: 2px;
+  border-top-left-radius: 2px; }
   .TabBar li {
     flex: 1;
     text-align: center;
@@ -833,7 +969,7 @@ input {
     .TabBar li:hover i {
       color: #444; }
     .TabBar li.active i {
-      color: #4285f4; }
+      color: #0095dd; }
     .TabBar li:last-child {
       border-right: 0; }
 
@@ -851,9 +987,6 @@ input {
     margin: 0;
     padding: 9px 10px;
     font-weight: normal;
-    background: transparent;
-    border: 1px solid #CCC;
-    color: #AAA;
     margin-left: auto; }
     .Header .Button:hover {
       background: #FAFAFA; }
@@ -875,15 +1008,15 @@ input {
   .CallHistory li .right {
     margin-left: auto; }
   .CallHistory li.accepted .fa {
-    color: #40ca19; }
+    color: #74bf43; }
     .CallHistory li.accepted .fa.fa-link {
-      color: #4285f4; }
+      color: #0095dd; }
   .CallHistory li.missed .username, .CallHistory li.missed .email, .CallHistory li.missed .CallDetails {
-    color: #c14218; }
+    color: #d74345; }
   .CallHistory li.missed .fa {
-    color: #c14218; }
+    color: #d74345; }
   .CallHistory li.missed.fa-link {
-    color: #4285f4; }
+    color: #0095dd; }
   .CallHistory li:hover {
     background: #EEE; }
 
@@ -913,10 +1046,10 @@ input {
       margin-bottom: 5px; }
       .InvitationList .Invitation .progressWrapper .progressBar {
         height: 100%;
-        background: #4285f4; }
+        background: #0095dd; }
     .InvitationList .Invitation .icons {
       background: transparent;
-      color: #c14218;
+      color: #d74345;
       padding: 0px 0px 3px 10px;
       flex: 0 0 18px !important; }
     .InvitationList .Invitation .icons.right {
@@ -929,12 +1062,12 @@ input {
       display: flex;
       align-items: center;
       visibility: visible;
-      background: #c14218;
+      background: #d74345;
       position: absolute;
       color: #FFF;
       font-size: 11px; }
       .InvitationList .Invitation .icons.right:hover {
-        background: #d74a1b; }
+        background: #c43c3e; }
       .InvitationList .Invitation .icons.right i {
         text-align: left;
         margin: 0;
@@ -967,36 +1100,53 @@ input {
     width: 24px;
     height: 24px; }
 
-.IncomingCall {
+.IncomingCall, .StartCall {
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 20px; }
-  .IncomingCall .callTypeIcons {
+  padding: 20px;
+  background: url("images/kanye-blur.png") top center;
+  background-size: cover; }
+  .IncomingCall.Unavailable, .StartCall.Unavailable {
+    background-image: none; }
+  .IncomingCall .callTypeIcons, .StartCall .callTypeIcons {
     margin: 2px 0 30px; }
-  .IncomingCall h3 i {
+  .IncomingCall h3 i, .StartCall h3 i {
     padding: 0 5px;
     color: #999; }
-  .IncomingCall h6 {
+  .IncomingCall h6, .StartCall h6 {
     font-size: 60%;
     padding-bottom: 10px;
     font-weight: normal;
     color: #BBB; }
-  .IncomingCall i {
+  .IncomingCall .callTypeIcons i, .StartCall .callTypeIcons i {
     color: #DDD;
     padding: 0 12px; }
-    .IncomingCall i.active {
-      color: #4285f4; }
-  .IncomingCall .avatar {
+    .IncomingCall .callTypeIcons i.active, .StartCall .callTypeIcons i.active {
+      color: #0095dd; }
+  .IncomingCall .avatar, .StartCall .avatar {
     border-radius: 50%;
     width: 100px;
     height: 100px;
     background: url("images/drake.png") no-repeat;
     background-size: cover;
     margin-bottom: 15px; }
-    .IncomingCall .avatar.unknown {
-      background: url("images/avatar.png") no-repeat;
+    .IncomingCall .avatar.unknown, .StartCall .avatar.unknown {
+      background: url("images/avatar-color.png") no-repeat;
       background-size: cover; }
+    .IncomingCall .avatar.link, .StartCall .avatar.link {
+      background: url("images/avatar-link.png") no-repeat;
+      background-size: cover; }
+  .IncomingCall .legal, .StartCall .legal {
+    font-size: 9px;
+    color: #BBB;
+    text-align: center;
+    padding: 15px 10px 0 10px; }
+    .IncomingCall .legal a, .StartCall .legal a {
+      color: #999;
+      text-decoration: none; }
+      .IncomingCall .legal a:hover, .StartCall .legal a:hover {
+        text-decoration: underline; }
 
 @keyframes rotate {
   from {
@@ -1012,39 +1162,173 @@ input {
   to {
     transform: rotate(359deg); } }
 
-.OutgoingCall {
+.Loading {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url("images/loading.png") no-repeat;
+  background-size: 24px;
+  margin: 5px;
+  -webkit-animation: rotate 1s infinite;
+  animation: rotate 1s infinite; }
+  .Loading.failed {
+    background: url("images/failed.png") no-repeat;
+    background-size: 24px;
+    -webkit-animation: none;
+    animation: none; }
+
+.OutgoingCall, .LinkPrompt {
   display: flex;
   align-items: center;
   flex-direction: column;
   padding: 20px; }
-  .OutgoingCall .loading {
-    position: relative;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    background: url("images/loading.png") no-repeat;
-    background-size: 24px;
-    margin: 5px;
-    -webkit-animation: rotate 1s infinite;
-    animation: rotate 1s infinite; }
-    .OutgoingCall .loading.failed {
-      background: url("images/failed.png") no-repeat;
-      background-size: 24px;
-      -webkit-animation: none;
-      animation: none; }
-  .OutgoingCall h3 {
+  .OutgoingCall h3, .LinkPrompt h3 {
     margin-bottom: 5px; }
-  .OutgoingCall h6 {
+  .OutgoingCall h6, .LinkPrompt h6 {
     font-size: 11px;
     color: #888;
     padding-bottom: 10px; }
-  .OutgoingCall .avatar {
+  .OutgoingCall .avatar, .LinkPrompt .avatar {
     border-radius: 50%;
     width: 100px;
     height: 100px;
     background: url("images/kanye.png") no-repeat;
     background-size: cover;
     margin-bottom: 15px; }
+
+.OutgoingCall {
+  background: url("images/drake-blur.png") top center;
+  background-size: cover; }
+  .OutgoingCall h6 {
+    color: rgba(255, 255, 255, 0.8); }
+
+.Settings .Option {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  align-items: center;
+  justify-content: flex-end; }
+  .Settings .Option h4 {
+    margin-right: auto;
+    font-size: 11px; }
+  .Settings .Option select {
+    text-align: right; }
+
+.Feedback h3 {
+  margin-top: 15px;
+  text-align: center; }
+.Feedback h6 {
+  font-size: 60%;
+  text-align: center;
+  padding-bottom: 10px;
+  font-weight: normal;
+  color: #BBB; }
+.Feedback small {
+  display: block;
+  font-size: 10px;
+  color: #CCC;
+  text-align: center; }
+.Feedback .Form {
+  font-size: 11px;
+  color: #444;
+  line-height: 24px; }
+  .Feedback .Form input {
+    margin-right: 0 6px;
+    height: 12px; }
+  .Feedback .Form input[type=text] {
+    padding: 3px 10px;
+    height: 22px;
+    width: 100%; }
+.Feedback .Back {
+  border-radius: 2px;
+  border: 1px solid #CCC;
+  color: #CCC;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 3px 10px;
+  display: inline; }
+  .Feedback .Back i {
+    margin-right: 8px; }
+.Feedback .Inner {
+  display: flex;
+  justify-content: center;
+  flex-direction: column; }
+.Feedback .Faces {
+  padding: 20px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+  .Feedback .Faces div {
+    border: 1px solid transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    flex: 1;
+    margin: 0 10px;
+    height: 80px;
+    background-size: 60px;
+    background-position: center center;
+    background-repeat: no-repeat; }
+    .Feedback .Faces div:hover {
+      border: 1px solid #DDD;
+      background-color: #FEFEFE; }
+    .Feedback .Faces div.active {
+      border: 1px solid #5CC4F7;
+      background-color: #FFF; }
+  .Feedback .Faces .happy {
+    background-image: url("images/happy.png"); }
+  .Feedback .Faces .sad {
+    background-image: url("images/sad.png"); }
+
+.Unavailable h3 {
+  padding: 45px 0; }
+
+.ErrorBar {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  border-bottom: 2px solid #E9E9E9; }
+  .ErrorBar i {
+    margin-right: 5px; }
+  .ErrorBar:hover .Title {
+    text-decoration: underline; }
+  .ErrorBar:hover i {
+    text-decoration: none; }
+  .ErrorBar.error .Title {
+    color: white;
+    background: repeating-linear-gradient(-45deg, #d74345, #d74345 10px, #d94b4d 10px, #d94b4d 20px); }
+  .ErrorBar.error .Message {
+    background: #fbebeb;
+    color: #d74345; }
+  .ErrorBar.warning .Title {
+    color: white;
+    background: repeating-linear-gradient(-45deg, #edc200, #edc200 10px, #f2c600 10px, #f2c600 20px); }
+  .ErrorBar.warning .Message {
+    background: #fff2ba;
+    color: #d3ad00; }
+  .ErrorBar .Title {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    padding: 5px;
+    text-align: center;
+    font-size: 10px; }
+    .ErrorBar .Title .fa-chevron-down {
+      transition: all 0.3s;
+      position: absolute;
+      right: 10px;
+      opacity: 0.5; }
+  .ErrorBar .Message {
+    padding: 15px 10px;
+    text-align: center;
+    font-size: 10px; }
+  .ErrorBar.open .Title .fa-chevron-down {
+    transform: translateY(1px) rotate(180deg); }
+  .ErrorBar.open .Message {
+    display: block; }
+  .ErrorBar.closed .Message {
+    display: none; }
 
 /*
 Tipr 1.0.1

@@ -4,8 +4,7 @@
 
 2. Ringing
 
-3. Call Failed
-
 ####Transitions to:
 
-1. Active Call (audio or video)
+1. <a class="real" href="#call-active">Active Call</a> (audio or video)
+2. <a class="real" href="#link-prompt">Call Failed</a>

@@ -1,20 +1,25 @@
-$green: #40CA19;
-$lightGreen: #49DB2B;
-$red: #C14218;
-$lightRed: #D74A1B;
-$blue: #4285F4;
-$darkBlue: #669BD7;
-$lightBlue: #5A94F5;
+$green: #74BF43;
+$lightGreen: #6CB23E;
+$red: #D74345;
+$lightRed: #C43C3E;
+$blue: #0095DD;
+$lightBlue: #008ACB;
+$darkBlue: #006B9D;
 $highlightBlue: #73DAFB;
 $teal: #6AA974;
-$panelBackground: #F5F5F5;
-$windowTitleBar: #111;
+$panelBackground: #FBFBFB;
+$windowTitleBar: #222;
 $white75: rgba(255, 255, 255, 0.75);
+$yellow: #EDC200;
 
 *, *:before, *:after {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+strong {
+  font-weight: bold;
 }
 
 hr {
@@ -33,6 +38,22 @@ label {
   font-size: 10px;
   color: #777;
   margin-top: 10px;
+}
+
+.link-button {
+  padding: 4px 9px;
+  font-size: 10px;
+  font-weight: bold;
+  color: $darkBlue;
+  background: #EEE;
+  border-radius: 2px;
+  margin: 0 10px;
+  text-transform: uppercase;
+  text-decoration: none;
+  &:hover {
+    color: #FFF;
+    background: $darkBlue;
+  }
 }
 
 body {
@@ -65,31 +86,35 @@ body {
 
 .LegalPanel {
   .Quick, .Footer {
-    opacity: 0.3;
-    transition: none;
-    pointer-events: none;
-    .Button {
-      background: #AAA;
-    }
+    // opacity: 0.3;
+    // transition: none;
+    // pointer-events: none;
+    // .Button {
+    //   background: #AAA;
+    // }
   }
 }
 
 .Legal {
  display: flex;
- padding: 10px;
- border-bottom: 1px solid #CCC;
+ padding: 3px 10px 10px 10px;
  background: #FFF;
  align-items: center;
+ text-align: center;
+ opacity: 0.5;
+ transition: opacity 0.3s;
+ &:hover {
+  opacity: 1;
+ }
  .Button {
    margin: 0;
    width: 100px;
  }
  p {
   line-height: 14px;
-  font-size: 10px;
-  font-weight: bold;
+  font-size: 8px;
   color: #555;
-  padding-right: 5px;
+  padding: 0 30px;
  }
 }
 
@@ -99,7 +124,7 @@ body {
 }
 
 .component-wrapper {
-  padding-top: 120px;
+  padding-top: 135px;
   padding-bottom: 60px;
   display: flex;
   .NoteWrapper {
@@ -129,7 +154,7 @@ body {
     color: #444;
     font-size: 70%;
     border: 1px solid #DDD;
-    border-radius: 3px;
+    border-radius: 2px;
     background: $panelBackground;
     padding: 20px;
     em {
@@ -172,10 +197,17 @@ body {
     padding: 3px 10px 3px 0;
     color: #AAA;
     transition: all 0.3s ease-in-out;
+    &:after {
+      content: '•';
+      padding-left: 10px;
+    }
     &.selected {
       color: $blue;
     }
     &:last-child {
+      &:after {
+        content: none;
+      }
       border: none;
     }
   }
@@ -293,10 +325,14 @@ h5 {
     font-size: 11px;
     font-weight: bold;
     margin-bottom: 10px;
-    &.higher {
-      top: -20px;
-      left: -50px;
+    &.left {
       position: relative;
+      left: -50px;
+    }
+    &.higher {
+      position: relative;
+      left: -50px;
+      top: -20px;
       margin-bottom: 30px;
     }
   }
@@ -363,7 +399,11 @@ h5 {
 .PanelGroupInner {
   display: flex;
   width: 200%;
-  background: #333;
+}
+
+.Inner {
+  flex: 1;
+  padding: 20px 10px;
 }
 
 .Panel, .Window {
@@ -390,13 +430,24 @@ h5 {
   border-radius: 4px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-  min-width: 300px;
+  width: 300px;
 }
 
 .Window {
+  border-radius: 4px;
   &.InCall {
     .WindowTitlebar {
       background: $windowTitleBar
+    }
+
+    .WindowBody {
+      .avatar {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+      }
+      h3 {
+        color: #FFF;
+        text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+      }
     }
   }
   .WindowTitlebar {
@@ -443,6 +494,26 @@ h5 {
 .VideoCall {
   position: relative;
   display: flex;
+  &.Hold {
+    .VideoScreen {
+      background: url('images/drake-hold.png') #333;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .floatingText {
+        top: -20px;
+        position: relative;
+        color: #EEE;
+        background: rgba(0,0,0,0.6);
+        border-radius: 20px;
+        padding: 10px 20px;
+      }
+      i {
+        padding-right: 10px;
+      }
+    }
+  }
   .VideoScreen {
     height: 240px;
     width: 100%;
@@ -526,6 +597,12 @@ h5 {
   justify-content: space-between;
 }
 
+#precall, #precall-firstrun {
+  .avatar {
+    background: url('images/avatar-color.png') no-repeat;
+    background-size: cover;
+  }
+}
 .Footer {
   padding: 5px 10px;
   font-size: 12px;
@@ -537,36 +614,86 @@ h5 {
   justify-content: flex-end;
   margin-top: auto;
   flex-direction: row;
-  a {
+  .avatar {
+    background: url('images/drake.png') no-repeat;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    background-size: cover;
+    min-width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+    flex: 32px 32px 32px;
+    position: relative;
+  }
+  .center {
     color: #222;
-    &:hover {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .username:hover {
       color: $lightBlue;
     }
   }
+  .subtle {
+    padding-right: 10px;
+    margin-left: auto;
+    font-size: 11px;
+    color: #999;
+    font-weight: normal;
+  }
   .Dropdown {
+    position: absolute;
     left: 15px;
-    top: -9%;
+    top: -8px;
     right: auto;
+    li {
+      white-space: nowrap;
+    }
     li i {
       color: $lightGreen;
-      &.grey {
+      &.fa-circle-o {
         color: #888;
       }
     }
   }
+  .userDetails {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    line-height: 14px;
+  }
   div {
-    flex: 3;
+    flex: 15;
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 5px 0px;
     position: relative;
+    .statusWrapper {
+      border: 1px solid transparent;
+      padding: 2px 4px;
+      margin-left: -4px;
+      margin-top: 2px;
+      &:hover {
+        border: 1px solid #DDD;
+        background: #F1F1F1;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+    }
+    .status-text {
+      font-weight: normal;
+      font-size: 10px;
+      color: #888;
+    }
     .status-icon {
+      padding-left: 5px;
       flex: 0 0 18px;
       cursor: pointer;
       i {
         color: $lightGreen;
-        &.grey {
+        font-size: 9px;
+        &.fa-circle-o {
           color: #888;
         }
       }
@@ -581,11 +708,23 @@ h5 {
     padding-left: 10px;
     justify-content: center;
     flex: 1;
+    cursor: pointer;
+    i.active {
+      color: $blue;
+    }
+    .Dropdown {
+      right: initial;
+      left: 29px;
+      li a {
+        color: #7F7F7F;
+        font-weight: normal;
+      }
+      li i {
+        color: #333;
+      }
+    }
   }
   &:hover {
-    .status-icon i.fa {
-      text-shadow: 0 0 5px $highlightBlue;
-    }
   }
   input {
     margin: 0;
@@ -621,7 +760,8 @@ h5 {
 }
 
 .ListWrapper {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 .ListPanels {
   display: flex;
@@ -646,32 +786,51 @@ h5 {
 
 .List {
   display: flex;
-  // overflow: hidden;
   flex-direction: column;
   transition: opacity 0.3s ease-in-out;
   &.faded {
     opacity: 0.3;
   }
   .scrollable {
-    max-height: 300px;
-    overflow: scroll;
+    // max-height: 300px;
+    // overflow: scroll;
+  }
+  h3 {
+    margin: 0;
+    border-bottom: none;
+    border-top: 1px solid #CCC;
   }
 }
 
 .Button {
   display: flex;
+  position: relative;
   cursor: pointer;
   justify-content: center;
-  padding: 15px 5px;
+  align-items: center;
+  padding: 13px 5px;
   margin: 15px 0 0 0;
-  color: #FFF;
-  background: #AAA;
-  font-weight: bold;
+  color: #333333;
+  background: #FBFBFB;
+  border: 1px solid #C1C1C1;
   height: 8px;
   font-size: 12px;
   line-height: 0px;
-  border-radius: 3px;
+  border-radius: 2px;
   white-space: nowrap;
+  .fa {
+    color: #FFF;
+    padding: 0 10px;
+  }
+  .chevron {
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 5px 8px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    line-height: 15px;
+  }
 }
 
 .ButtonGroup {
@@ -693,30 +852,45 @@ h5 {
 .Button {
   &.action {
     background: $green;
+    border: none;
+    color: #FFF;
     &:hover {
       background: $lightGreen;
     }
     &.cancel {
+      border: none;
       background: $red;
       border-color: $lightRed;
     }
   }
   &.cancel {
+    border: none;
     background: $red;
+    color: #FFF;
   }
-  &.action.cancel:hover, &.cancel:hover {
-    background: $lightRed;
-  }
-  &.default {
+  &.emphasis {
     background: $blue;
+    color: #FFF;
+    border: none;
     &:hover {
       background: $lightBlue;
     }
   }
+  &.action.cancel:hover, &.cancel:hover {
+    background: $lightRed;
+    color: #FFF;
+  }
+  &.default {
+    background: #FBFBFB;
+    color: #333;
+    border: 1px solid #C1C1C1;
+    &:hover {
+      background: #EBEBEB;
+    }
+  }
   &.default-active {
-    background: #FFF;
-    color: $blue;
-    box-shadow: 0 0 0 1px $blue;
+    background: #CCC;
+    color: #111;
   }
 }
 
@@ -784,7 +958,7 @@ h5 {
 
 input {
   outline: none;
-  border-radius: 4px;
+  border-radius: 2px;
   height: 24px;
   flex: 24px;
   padding: 0 10px;
@@ -856,12 +1030,17 @@ input {
   color: #666;
   font-size: 13px;
   border-top: 1px solid #DDD;
+  &.blocked {
+    .username {
+      color: $red;
+    }
+  }
   align-items: center;
   &:hover {
     background: #EEE;
   }
   &.selected {
-    background: #D1E8FF;
+    background: #EBEBEB;
   }
   &:hover .icons {
     visibility: visible;
@@ -903,8 +1082,14 @@ input {
     font-size: 12px;
     line-height: 20px;
     color: #222;
-    font-weight: bold;
-    i.fa {
+    font-weight: normal;
+    strong {
+      font-weight: bold;
+    }
+    i.fa-minus-circle {
+      padding-left: 3px;
+    }
+    i.fa-google {
       position: absolute;
       right: 10px;
       top: 35%;
@@ -942,14 +1127,14 @@ input {
   background: #FDFDFD;
   padding: 5px;
   z-index: 1000;
-  border-radius: 3px;
+  border-radius: 2px;
   display: none;
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   li {
     margin: 3px 0px;
     padding: 4px 6px;
     border: 1px solid transparent;
-    border-radius: 3px;
+    border-radius: 2px;
     cursor: pointer;
     &:hover {
       border: 1px solid #CCC;
@@ -1030,8 +1215,8 @@ input {
   padding: 10px;
   border-bottom: 1px solid #CCC;
   background: #FAFAFA;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
+  border-top-right-radius: 2px;
+  border-top-left-radius: 2px;
   li {
     flex: 1;
     text-align: center;
@@ -1066,11 +1251,11 @@ input {
   height: 24px;
   .Button {
     margin: 0;
-      padding: 9px 10px;
-      font-weight: normal;
-      background: transparent;
-    border: 1px solid #CCC;
-    color: #AAA;
+    padding: 9px 10px;
+    font-weight: normal;
+    // background: transparent;
+    // border: 1px solid #CCC;
+    // color: #AAA;
     margin-left: auto;
     &:hover {
       background: #FAFAFA;
@@ -1235,12 +1420,17 @@ input {
   }
 }
 
-
-.IncomingCall {
+.IncomingCall, .StartCall {
   display: flex;
   align-items: center;
   flex-direction: column;
   padding: 20px;
+  background: url('images/kanye-blur.png') top center;
+  background-size: cover;
+  &.Unavailable {
+    background-image: none;
+  }
+
   .callTypeIcons {
     margin: 2px 0 30px;
   }
@@ -1254,11 +1444,13 @@ input {
     font-weight: normal;
     color: #BBB;
   }
-  i {
-    color: #DDD;
-    padding: 0 12px;
-    &.active {
-      color: $blue;
+  .callTypeIcons {
+    i {
+      color: #DDD;
+      padding: 0 12px;
+      &.active {
+        color: $blue;
+      }
     }
   }
   .avatar {
@@ -1269,8 +1461,25 @@ input {
     background-size: cover;
     margin-bottom: 15px;
     &.unknown {
-      background: url('images/avatar.png') no-repeat;
+      background: url('images/avatar-color.png') no-repeat;
       background-size: cover;
+    }
+    &.link {
+      background: url('images/avatar-link.png') no-repeat;
+      background-size: cover;
+    }
+  }
+  .legal {
+    font-size: 9px;
+    color: #BBB;
+    text-align: center;
+    padding: 15px 10px 0 10px;
+    a {
+      color: #999;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }
@@ -1285,28 +1494,29 @@ input {
   to { transform: rotate(359deg); }
 }
 
-.OutgoingCall {
+.Loading {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url('images/loading.png') no-repeat;
+  &.failed {
+    background: url('images/failed.png') no-repeat;
+    background-size: 24px;
+    -webkit-animation: none;
+    animation: none;
+  }
+  background-size: 24px;
+  margin: 5px;
+  -webkit-animation: rotate 1s infinite;
+  animation: rotate 1s infinite;
+}
+
+.OutgoingCall, .LinkPrompt {
   display: flex;
   align-items: center;
   flex-direction: column;
   padding: 20px;
-  .loading {
-    position: relative;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    background: url('images/loading.png') no-repeat;
-    &.failed {
-      background: url('images/failed.png') no-repeat;
-      background-size: 24px;
-      -webkit-animation: none;
-      animation: none;
-    }
-    background-size: 24px;
-    margin: 5px;
-    -webkit-animation: rotate 1s infinite;
-    animation: rotate 1s infinite;
-  }
   h3 {
     margin-bottom: 5px;
   }
@@ -1324,6 +1534,209 @@ input {
     margin-bottom: 15px;
   }
 }
+
+.OutgoingCall {
+  background: url('images/drake-blur.png') top center;
+  background-size: cover;
+  h6 {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+
+.Settings {
+  .Option {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    align-items: center;
+    justify-content: flex-end;
+    h4 {
+      margin-right: auto;
+      font-size: 11px;
+    }
+    select {
+      text-align: right;
+    }
+  }
+}
+
+.Feedback {
+  h3 {
+    margin-top: 15px;
+    text-align: center;
+  }
+  h6 {
+    font-size: 60%;
+    text-align: center;
+    padding-bottom: 10px;
+    font-weight: normal;
+    color: #BBB;
+  }
+  small {
+    display: block;
+    font-size: 10px;
+    color: #CCC;
+    text-align: center;
+  }
+  .Form {
+    font-size: 11px;
+    color: #444;
+    line-height: 24px;
+    input {
+      margin-right: 0 6px;
+      height: 12px;
+    }
+    input[type=text]{
+      padding: 3px 10px;
+      height: 22px;
+      width: 100%;
+    }
+  }
+  .Back {
+    border-radius: 2px;
+    border: 1px solid #CCC;
+    color: #CCC;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 3px 10px;
+    display: inline;
+     i {
+      margin-right: 8px;
+     }
+  }
+  .Inner {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .Faces {
+    padding: 20px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    div {
+      border: 1px solid transparent;
+      &:hover {
+        border: 1px solid #DDD;
+        background-color: #FEFEFE;
+      }
+      &.active {
+        border: 1px solid #5CC4F7;
+        background-color: #FFF;
+      }
+      cursor: pointer;
+      border-radius: 4px;
+      flex: 1;
+      margin: 0 10px;
+      height: 80px;
+      background-size: 60px;
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+    .happy {
+      background-image: url('images/happy.png');
+    }
+    .sad {
+      background-image: url('images/sad.png');
+    }
+  }
+}
+
+.Unavailable {
+  h3 {
+    padding: 45px 0;
+  }
+}
+
+.ErrorBar {
+  i {
+    margin-right: 5px;
+  }
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  border-bottom: 2px solid #E9E9E9;
+  &:hover {
+    .Title {
+      text-decoration: underline;
+    }
+    i {
+      text-decoration: none;
+    }
+  }
+  &.error {
+    .Title {
+    color: lighten($red, 85%);
+    background: repeating-linear-gradient(
+      -45deg,
+      $red,
+      $red 10px,
+      lighten($red, 2%) 10px,
+      lighten($red, 2%) 20px
+    );
+    }
+    .Message {
+      background: lighten($red, 40%);
+      color: $red;
+    }
+  }
+  &.warning {
+    .Title {
+    color: lighten($yellow, 85%);
+    background: repeating-linear-gradient(
+      -45deg,
+      $yellow,
+      $yellow 10px,
+      lighten($yellow, 1%) 10px,
+      lighten($yellow, 1%) 20px
+    );
+    }
+    .Message {
+      background: lighten($yellow, 40%);
+      color: darken($yellow, 5%);
+    }
+  }
+  .Title {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    padding: 5px;
+    text-align: center;
+    font-size: 10px;
+
+    .fa-chevron-down {
+      transition: all 0.3s;
+      position: absolute;
+      right: 10px;
+      opacity: 0.5;
+    }
+  }
+
+  .Message {
+    padding: 15px 10px;
+    text-align: center;
+    font-size: 10px;
+  }
+
+  &.open {
+    .Title .fa-chevron-down {
+      transform: translateY(1px) rotate(180deg)
+    }
+    .Message {
+      display: block;
+    }
+  }
+  &.closed {
+    .Message {
+      display: none;
+    }
+  }
+
+}
+
+
 /*
 Tipr 1.0.1
 Copyright (c) 2013 Tipue

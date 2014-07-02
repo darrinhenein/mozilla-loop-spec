@@ -12,6 +12,7 @@ module.exports = React.createClass({
           <Panel items={ this.props.items }>
             <HistoryList/>
           </Panel>
+          <Footer linkText={STRINGS.signOut} username={STRINGS.loggedInUsername}/>
         </BaseState>
     );
   }

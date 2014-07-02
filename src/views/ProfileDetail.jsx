@@ -3,6 +3,7 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       isDropdownVisible: false,
+      blocked: this.props.user.blocked
     }
   },
   onClick: function(){
@@ -24,12 +25,23 @@ module.exports = React.createClass({
       isDropdownVisible: !this.state.isDropdownVisible
     });
   },
+  toggleBlocked: function(){
+    this.props.user.blocked = !this.state.blocked;
+    this.setState({
+      blocked: !this.state.blocked
+    });
+  },
   render: function(){
+    var blocked = this.state.blocked ? 'blocked' : '';
+    var username = this.props.user.name.split(' ');
     return (
-      <div onClick={this.onClick} className={["Profile", this.props.selected].join(' ')} >
+      <div onClick={this.onClick} className={["Profile", this.props.selected].join(' ') + " " + blocked} >
         <div className={"avatar user-" + this.props.user.index}></div>
         <div className="details">
-          <div className="username">{ this.props.user.name } <i className={this.props.user.isGoogle ? 'fa fa-google' : ''}></i></div>
+          <div className="username"><strong>{ username[0] }</strong> { username[1] }
+            <i className={this.props.user.isGoogle ? 'fa fa-google' : ''}></i>
+            <i className={ this.state.blocked ? 'fa fa-minus-circle' : ''}></i>
+          </div>
           <div className="email">
             { this.props.user.email }
           </div>
@@ -42,6 +54,7 @@ module.exports = React.createClass({
           <li><i className="fa fa-video-camera"></i>Video Call</li>
           <li><i className="fa fa-phone"></i>Audio Call</li>
           <li onClick={this.props.onClickEdit}><i className="fa fa-user"></i>Edit Contact...</li>
+          <li onClick={this.toggleBlocked}><i className="fa fa-ban"></i>{ this.state.blocked ? 'Unblock Contact' : 'Block Contact' }</li>
           <li><i className="fa fa-trash-o"></i>Remove Contact</li>
         </ul>
       </div>

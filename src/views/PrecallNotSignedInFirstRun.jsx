@@ -10,13 +10,12 @@ module.exports = React.createClass({
   render: function() {
     return (
         <BaseState name={ this.props.name } index={ this.props.index }>
-          <TabBar selected={this.props.tab} disabled="2" />
+          <TabBar selected={this.props.tab} disabled="[1,2]" />
             <Panel extraClass="LegalPanel" items={ this.props.items }>
-              <div className="Legal">
-                <p>By proceeding, you accept the <a href="https://accounts.firefox.com/en-us/legal/terms">Terms and Services</a> and <a href="https://accounts.firefox.com/en-us/legal/privacy">Privacy Notice</a>.</p>
-                <Button text="OK" id="legal-ok-button" style="default" />
-              </div>
               <NewCallViewQuick/>
+              <div className="Legal">
+                <p>By using this product, you agree to the <a href="https://accounts.firefox.com/en-us/legal/terms">Terms of Use</a> and <a href="https://accounts.firefox.com/en-us/legal/privacy">Privacy Notice</a>.</p>
+              </div>
               <Footer linkText={STRINGS.signIn} username={STRINGS.loggedOutUsername}/>
             </Panel>
         </BaseState>

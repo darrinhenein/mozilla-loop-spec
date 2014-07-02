@@ -93,13 +93,19 @@ module.exports = React.createClass({
 
     var contact = this.state.items[this.state.selectedIndex] || { name: '', email: ''};
 
+    shownItems = _.groupBy(shownItems, function(contact) {
+      return contact.blocked ? 'blocked' : 'available';
+    });
+
     return (
       <div className="ListWrapper">
         <div ref="listSlider" className="ListPanels">
           <div className={"List " + (this.props.faded ? 'faded': '')}>
               <SearchBar isOpen={this.state.isOpen} onClick={this.togglePanel} ref="filterSearchBar" val={this.state.filterText} handleChange={this.handleChange} />
-              <ul className="scrollable">
-               {shownItems.map(viewForItem)}
+              <ul className="">
+               { shownItems.available ? shownItems.available.map(viewForItem) : null }
+               { shownItems.blocked && !this.props.noBlocked ? <h3 className="Header">Blocked Contacts</h3> : null }
+               { shownItems.blocked && !this.props.noBlocked ? shownItems.blocked.map(viewForItem) : null }
               </ul>
           </div>
           <div className="EditContact">

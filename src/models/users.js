@@ -27,6 +27,7 @@ module.exports = [
     name: 'Ellie Eggplant',
     email: 'ellie@yahoo.com',
     index: 4,
-    isGoogle: true
+    isGoogle: true,
+    blocked: true
   }
 ];

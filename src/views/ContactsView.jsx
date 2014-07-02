@@ -65,7 +65,7 @@ module.exports = React.createClass({
 
             <div className="ContactManagementView">
               <div className="ButtonGroup">
-                <Button text="Import Contacts" style="default"/>
+                <Button id="import-contacts" text="Import Contacts" style="default"/>
                 <Button text="New Contact" onClick={this.toggleView} style={this.state.isVisible ? 'default-active' : 'default'}/>
               </div>
 

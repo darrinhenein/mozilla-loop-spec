@@ -20,7 +20,9 @@ module.exports = React.createClass({
     });
 
     $(this.refs.container.getDOMNode()).on('click', 'a', function(e){
-      e.preventDefault();
+      if(!$(this).hasClass('real')){
+        e.preventDefault();
+      }
     });
   },
   render: function(){

@@ -1,5 +1,5 @@
 ###Import Contacts
-This button would open the Google Contacts permissions flow in a new tab.
+This [button](#import-contacts) would open the Google Contacts permissions flow in a new tab. If contacts have already been imported from the service, the button would instead be labelled "Sync Contacts".
 
 ###New Contact
 This allows the creation of a new _local_ contact.

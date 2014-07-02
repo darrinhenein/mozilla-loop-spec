@@ -15,7 +15,7 @@ module.exports = React.createClass({
           <PanelGroup>
             <Panel items={ this.props.items }>
               <Header username={STRINGS.loggedInUsername} editText={STRINGS.viewAccount}/>
-              <BuddyList items={this.props.items} />
+              <BuddyList items={this.props.items} noBlocked />
               <Footer linkText={STRINGS.signOut}/>
             </Panel>
             <Panel items={ this.props.items }>

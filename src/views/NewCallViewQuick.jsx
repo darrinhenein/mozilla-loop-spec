@@ -46,7 +46,7 @@ module.exports= React.createClass({
           <h3>Share this link to invite someone to talk:</h3>
           <div className="inputControls">
             <input value={STRINGS.sampleCallURL}></input>
-            <span onClick={this.onClick} id="newcall-cog"><i className={"fa fa-cog " + this.state.isCustomizing}></i></span>
+            <span onClick={this.onClick} id="newcall-cog"><i className={"fa fa-tag " + this.state.isCustomizing}></i></span>
           </div>
           <div className="Customize" ref="customizePanel">
             <h5>Invitation Name</h5>
@@ -55,8 +55,8 @@ module.exports= React.createClass({
             <input valueLink={this.linkState('callDuration')} type="range" name="time" min="1" max="100"></input>
           </div>
           <div className="ButtonGroup">
-            <Button text="Share" style="default"/>
-            <Button text={this.state.copyText} onClick={this.copied} style="default"/>
+            <Button text="Share" hasRightChevron style="default" style="emphasis"/>
+            <Button text={this.state.copyText} onClick={this.copied} style="emphasis"/>
           </div>
         </div>
       )

@@ -5,7 +5,7 @@ module.exports = {
   signIn: "Sign In",
   signOut: "Sign Out",
   changeUsername: "Change",
-  loggedInUsername: "ally@gmail.com",
+  loggedInUsername: "drake@tdot.com",
   loggedOutUsername: "Guest",
   newCallButton: "New Invitation",
   callingAs: "Calling as",
@@ -13,12 +13,13 @@ module.exports = {
   getLinkText: "Get Link",
   callNamePlaceholder: "Orange Prickly Badger",
   inviteExpireIn: "Invitation will expire in",
-  sampleCallURL: "http://lo.op/" + Utils.getRandomString(8),
+  sampleCallURL: "http://talk.mozilla.org/" + Utils.getRandomString(8),
   shareThisLinkWith: "Share this link with",
   contactManagement: "Add or Import Contacts",
   callHistory: "Call History",
   clearHistory: "Clear",
   invitationList: "Your Invitations",
   expired: "Expired",
-  endCall: "Hang Up"
+  endCall: "Hang Up",
+  feedbackQuestion: "How was your call experience?"
 };
